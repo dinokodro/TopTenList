@@ -123,12 +123,12 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             return tvShows.count
         default:
             return movies.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         switch segmentControl.selectedSegmentIndex {
-        
         case 0:
             let movie = movies[indexPath.row]
             cell.ranking.text = "\(indexPath.row + 1)"
@@ -146,6 +146,7 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             cell.title.text = movie.title
             cell.desc.text = movie.description
         }
+        
         
         return cell
     }
