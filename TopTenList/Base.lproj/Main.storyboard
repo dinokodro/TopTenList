@@ -23,6 +23,9 @@
                                     <segment title="Movies"/>
                                     <segment title="Tv Shows"/>
                                 </segments>
+                                <connections>
+                                    <action selector="switchTableView:" destination="tFA-pn-99H" eventType="valueChanged" id="IAs-yN-Us1"/>
+                                </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YCs-jp-Q8C">
                                 <rect key="frame" x="0.0" y="112" width="375" height="555"/>

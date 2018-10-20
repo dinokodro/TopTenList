@@ -10,8 +10,6 @@ import Foundation
 
 struct TvShow: BasicInfoProtocol {
     
-    var id: String
-    
     var posterPath: String
     
     var title: String
