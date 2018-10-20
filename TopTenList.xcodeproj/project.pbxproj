@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		448BCC8DF64D47EC4C03C3B3 /* Pods_TopTenListUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 656270B7E980D39EE9FAE536 /* Pods_TopTenListUITests.framework */; };
 		4CB4BABEE3FF6EC3AF0706CF /* Pods_TopTenList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB036B21AF1271AA8FC1D285 /* Pods_TopTenList.framework */; };
+		9E41424D217B592B00434905 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41424C217B592B00434905 /* DetailViewController.swift */; };
+		9E414254217B62C900434905 /* TopTenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414253217B62C900434905 /* TopTenViewController.swift */; };
 		9E630683217B450600D3C28A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E630682217B450600D3C28A /* AppDelegate.swift */; };
-		9E630685217B450600D3C28A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E630684217B450600D3C28A /* ViewController.swift */; };
 		9E630688217B450600D3C28A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E630686217B450600D3C28A /* Main.storyboard */; };
 		9E63068A217B450800D3C28A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E630689217B450800D3C28A /* Assets.xcassets */; };
 		9E63068D217B450800D3C28A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E63068B217B450800D3C28A /* LaunchScreen.storyboard */; };
@@ -42,9 +43,10 @@
 		3B025A4888E07ABDD1371839 /* Pods-TopTenList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopTenList.release.xcconfig"; path = "Pods/Target Support Files/Pods-TopTenList/Pods-TopTenList.release.xcconfig"; sourceTree = "<group>"; };
 		656270B7E980D39EE9FAE536 /* Pods_TopTenListUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TopTenListUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		853CD0271287F374384B6B8B /* Pods-TopTenListUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopTenListUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TopTenListUITests/Pods-TopTenListUITests.release.xcconfig"; sourceTree = "<group>"; };
+		9E41424C217B592B00434905 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		9E414253217B62C900434905 /* TopTenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTenViewController.swift; sourceTree = "<group>"; };
 		9E63067F217B450600D3C28A /* TopTenList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TopTenList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E630682217B450600D3C28A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9E630684217B450600D3C28A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9E630687217B450600D3C28A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9E630689217B450800D3C28A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E63068C217B450800D3C28A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -112,6 +114,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9E41424E217B593500434905 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				9E41424C217B592B00434905 /* DetailViewController.swift */,
+				9E414253217B62C900434905 /* TopTenViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		9E630676217B450600D3C28A = {
 			isa = PBXGroup;
 			children = (
@@ -138,8 +149,8 @@
 			isa = PBXGroup;
 			children = (
 				9E630682217B450600D3C28A /* AppDelegate.swift */,
-				9E630684217B450600D3C28A /* ViewController.swift */,
 				9E630686217B450600D3C28A /* Main.storyboard */,
+				9E41424E217B593500434905 /* ViewControllers */,
 				9E630689217B450800D3C28A /* Assets.xcassets */,
 				9E63068B217B450800D3C28A /* LaunchScreen.storyboard */,
 				9E63068E217B450800D3C28A /* Info.plist */,
@@ -393,7 +404,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E630685217B450600D3C28A /* ViewController.swift in Sources */,
+				9E41424D217B592B00434905 /* DetailViewController.swift in Sources */,
+				9E414254217B62C900434905 /* TopTenViewController.swift in Sources */,
 				9E630683217B450600D3C28A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
