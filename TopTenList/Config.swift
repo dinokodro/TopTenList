@@ -8,9 +8,7 @@
 
 import Foundation
 
-struct Config{
-    
+struct Config {
     static let API_KEY =  "4aa0aa668b1d20ef02867315419d5880"
-    
 }
 

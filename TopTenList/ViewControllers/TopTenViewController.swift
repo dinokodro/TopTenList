@@ -7,8 +7,14 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class TopTenViewController: UIViewController {
+    
+    var detailViewController: DetailViewController? = nil
+    var movies = [Movie]()
+    var tvShows = [TvShow]()
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -19,6 +25,7 @@ class TopTenViewController: UIViewController {
         tableView.delegate = self
 
         createNavBar()
+        getTopRatedMovies()
     }
     
     func createNavBar () {
@@ -35,37 +42,66 @@ class TopTenViewController: UIViewController {
         navigationItem.title = "Top Ten App"
     }
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func getTopRatedMovies () {
+        Alamofire.request("https://api.themoviedb.org/3/movie/top_rated?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US").responseJSON {
+            response in
+            
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                
+                for(_, SubJSON):(String, JSON) in json["results"]{
+                    let newMovie = Movie(id: "1",
+                                         posterPath: SubJSON["poster_path"].rawValue as! String,
+                                         title: SubJSON["title"].rawValue as! String,
+                                         description: SubJSON["overview"].rawValue as! String)
+
+                    self.movies.append(newMovie)
+                }
+                self.tableView.reloadData()
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
-    */
 
 }
 
 
 extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetail" {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let object = movies[indexPath.row]
+                let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+//                controller.detailItem = object
+//                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+//                controller.navigationItem.leftItemsSupplementBackButton = true
+            }
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 10
+        return 1
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+       return movies.count
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as? CustomTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         
-        cell?.ranking.text = "1"
-        cell?.title.text = "Custom title"
-        cell?.desc.text = "Custom Description"
+        let movie = movies[indexPath.row]
         
-        return cell!
+        cell.ranking.text = "\(indexPath.row + 1)"
+        cell.title.text = movie.title
+        cell.desc.text = movie.description
+        print(movie)
+        return cell
     }
     
 }

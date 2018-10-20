@@ -9,6 +9,7 @@ target 'TopTenList' do
 	pod 'Alamofire'
 	pod 'Kingfisher'
 	pod 'SwiftLint'
+	pod 'SwiftyJSON'
 
   target 'TopTenListTests' do
     inherit! :search_paths
