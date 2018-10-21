@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class DetailViewController: UIViewController {
 
@@ -31,6 +32,12 @@ class DetailViewController: UIViewController {
             }
             if let label = desc {
                 label.text = detail.description
+            }
+            if let label = image {
+                let url = URL(string: detail.imageURL)!
+                label.kf.setImage(with: url)
+                label.layer.cornerRadius = 10
+                label.clipsToBounds = true
             }
         }
     }

@@ -57,7 +57,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GXh-VN-PVp">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GXh-VN-PVp">
                                                     <rect key="frame" x="122" y="31.5" width="198" height="14"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
@@ -160,13 +160,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZMe-cM-7er">
-                                <rect key="frame" x="163" y="309" width="49.5" height="29"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
+                                <rect key="frame" x="169" y="309" width="37" height="21.5"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="czn-m3-oeq">
-                                <rect key="frame" x="16" y="338" width="343" height="313"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="czn-m3-oeq">
+                                <rect key="frame" x="16" y="340.5" width="343" height="218"/>
                                 <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -177,11 +177,10 @@
                         <constraints>
                             <constraint firstItem="0i8-lQ-ufb" firstAttribute="centerX" secondItem="EHt-CJ-i4Q" secondAttribute="centerX" id="6jg-yE-O7p"/>
                             <constraint firstItem="ZMe-cM-7er" firstAttribute="top" secondItem="0i8-lQ-ufb" secondAttribute="bottom" constant="10" id="E5G-4J-sJt"/>
-                            <constraint firstItem="3eN-qq-8j2" firstAttribute="trailing" secondItem="czn-m3-oeq" secondAttribute="trailing" constant="16" id="Gdb-Rx-wH0"/>
-                            <constraint firstItem="czn-m3-oeq" firstAttribute="leading" secondItem="3eN-qq-8j2" secondAttribute="leading" constant="16" id="Ulu-Da-elL"/>
-                            <constraint firstItem="3eN-qq-8j2" firstAttribute="bottom" secondItem="czn-m3-oeq" secondAttribute="bottom" constant="16" id="Z3u-dA-Yai"/>
-                            <constraint firstItem="czn-m3-oeq" firstAttribute="top" secondItem="ZMe-cM-7er" secondAttribute="bottom" id="dTs-5V-PuT"/>
+                            <constraint firstItem="czn-m3-oeq" firstAttribute="top" secondItem="ZMe-cM-7er" secondAttribute="bottom" constant="10" id="Pht-Il-r82"/>
                             <constraint firstItem="ZMe-cM-7er" firstAttribute="centerX" secondItem="EHt-CJ-i4Q" secondAttribute="centerX" id="qqW-Ri-zyS"/>
+                            <constraint firstItem="3eN-qq-8j2" firstAttribute="trailing" secondItem="czn-m3-oeq" secondAttribute="trailing" constant="16" id="vuE-2Q-ljv"/>
+                            <constraint firstItem="czn-m3-oeq" firstAttribute="leading" secondItem="EHt-CJ-i4Q" secondAttribute="leading" constant="16" id="yg4-oC-GK1"/>
                             <constraint firstItem="0i8-lQ-ufb" firstAttribute="top" secondItem="3eN-qq-8j2" secondAttribute="top" constant="10" id="zTW-Xy-dZS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3eN-qq-8j2"/>

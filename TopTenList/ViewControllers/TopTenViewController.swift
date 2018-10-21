@@ -88,7 +88,6 @@ class TopTenViewController: UIViewController {
                 print(error)
             }
         }
-        LocalStorage.shared.movies = movies
     }
     
     // Get top rated Tv Shows from TMDB, through Alamofire and swiftyJSON
