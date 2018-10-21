@@ -14,7 +14,7 @@ What is needed in order to build and run the app:
 Newest Xcode (Version 10.0 used for this project) and a Mac
 ```
 
-### Installing and Building
+### Build and Run the TopTenList app
 
 5 simple steps for launching the application locally:
 
