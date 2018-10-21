@@ -10,7 +10,7 @@ import Foundation
 
 struct Movie: BasicInfoProtocol {
     
-    var posterPath: String
+    var imageURL: String
     
     var title: String
     

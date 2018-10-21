@@ -10,7 +10,7 @@ import Foundation
 
 protocol BasicInfoProtocol {
     
-    var posterPath: String {get}
+    var imageURL: String {get}
     var title: String {get}
     var description: String {get}
     

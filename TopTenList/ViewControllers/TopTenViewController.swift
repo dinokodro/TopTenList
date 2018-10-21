@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import Kingfisher
 
 class TopTenViewController: UIViewController {
     
@@ -55,9 +56,10 @@ class TopTenViewController: UIViewController {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
+                let posterRoot = Config.base_URL + Config.listPhotoSize
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
-                    let newMovie = Movie(posterPath: SubJSON["poster_path"].rawValue as! String,
+                    let newMovie = Movie(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
                                          title: SubJSON["title"].rawValue as! String,
                                          description: SubJSON["overview"].rawValue as! String)
 
@@ -78,9 +80,10 @@ class TopTenViewController: UIViewController {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
+                let posterRoot = Config.base_URL + Config.listPhotoSize
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
-                    let newTvShow = TvShow(posterPath: SubJSON["poster_path"].rawValue as! String,
+                    let newTvShow = TvShow(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
                                         title: SubJSON["name"].rawValue as! String,
                                         description: SubJSON["overview"].rawValue as! String)
                     
@@ -102,11 +105,23 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                let object = movies[indexPath.row]
-                let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-//                controller.detailItem = object
-//                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-//                controller.navigationItem.leftItemsSupplementBackButton = true
+//                switch segmentControl.selectedSegmentIndex {
+//                case 0:
+////                    let movie = movies[indexPath.row]
+////                    let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+////                        controller.detailItem = movie
+////                        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+//                //                controller.navigationItem.leftItemsSupplementBackButton = true
+//                case 1:
+////                    let tvShow = movies[indexPath.row]
+////                    let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+////                        controller.detailItem = object
+////                        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+//                    //  controller.navigationItem.leftItemsSupplementBackButton = true
+//                default:
+//                    break
+//                }
+               
             }
         }
     }
@@ -122,8 +137,9 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         case 1:
             return tvShows.count
         default:
-            return movies.count
+            break
         }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -131,23 +147,22 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         switch segmentControl.selectedSegmentIndex {
         case 0:
             let movie = movies[indexPath.row]
+            let url = URL(string: movie.imageURL)!
+            cell.photo.kf.setImage(with: url)
+            
             cell.ranking.text = "\(indexPath.row + 1)"
             cell.title.text = movie.title
             cell.desc.text = movie.description
         case 1:
             let tvShow = tvShows[indexPath.row]
+            let url = URL(string: tvShow.imageURL)!
+            cell.photo.kf.setImage(with: url)
             cell.ranking.text = "\(indexPath.row + 1)"
             cell.title.text = tvShow.title
             cell.desc.text = tvShow.description
-            print("dino")
         default:
-            let movie = movies[indexPath.row]
-            cell.ranking.text = "\(indexPath.row + 1)"
-            cell.title.text = movie.title
-            cell.desc.text = movie.description
+            break
         }
-        
-        
         return cell
     }
     
