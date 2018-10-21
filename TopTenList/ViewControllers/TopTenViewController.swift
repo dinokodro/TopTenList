@@ -117,30 +117,28 @@ class TopTenViewController: UIViewController {
     
 }
 
-// Extension of TopTenViewController dealing with table-related tasks
+// Extension of TopTenViewController dealing with table related tasks
 extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detail" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 
+                var tmdb = movies[indexPath.row]
                 
                 switch segmentControl.selectedSegmentIndex {
-
                 case 0:
-                    let movie = movies[indexPath.row]
-                    let controller = segue.destination  as! DetailViewController
-                    controller.tmdb = movie
-                    print("dino")
-
+                    tmdb = movies[indexPath.row]
+                    
                 case 1:
-                    let tvShow = tvShows[indexPath.row]
-                    let controller = segue.destination as! DetailViewController
-                    controller.tmdb = tvShow
+                    tmdb = tvShows[indexPath.row]
                     
                 default:
                     break
                 }
+                
+                let controller = segue.destination  as! DetailViewController
+                controller.tmdb = tmdb
             }
         }
     }
@@ -158,8 +156,8 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         switch segmentControl.selectedSegmentIndex {
-            
         case 0:
             return movies.count
             
@@ -174,33 +172,28 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
+        
+        var tmdb = movies[indexPath.row]
+        
         switch segmentControl.selectedSegmentIndex {
-            
         case 0:
-            let movie = movies[indexPath.row]
-            let url = URL(string: movie.imageURL)!
-            
-            cell.ranking.text = "\(indexPath.row + 1)"
-            cell.photo.kf.setImage(with: url)
-            cell.photo.layer.cornerRadius = 10
-            cell.photo.clipsToBounds = true
-            cell.title.text = movie.title
-            cell.desc.text = movie.description
+            tmdb = movies[indexPath.row]
             
         case 1:
-            let tvShow = tvShows[indexPath.row]
-            let url = URL(string: tvShow.imageURL)!
-            
-            cell.ranking.text = "\(indexPath.row + 1)"
-            cell.photo.kf.setImage(with: url)
-            cell.photo.layer.cornerRadius = 10
-            cell.photo.clipsToBounds = true
-            cell.title.text = tvShow.title
-            cell.desc.text = tvShow.description
-            
+            tmdb = tvShows[indexPath.row]
         default:
             break
         }
+        
+        let url = URL(string: tmdb.imageURL)!
+
+        cell.ranking.text = "\(indexPath.row + 1)"
+        cell.photo.kf.setImage(with: url)
+        cell.photo.layer.cornerRadius = 10
+        cell.photo.clipsToBounds = true
+        cell.title.text = tmdb.title
+        cell.desc.text = tmdb.description
+        
         return cell
     }
 }
