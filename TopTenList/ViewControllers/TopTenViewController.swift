@@ -14,8 +14,8 @@ import Kingfisher
 class TopTenViewController: UIViewController {
     
     var detailViewController: DetailViewController? = nil
-    var movies = [Movie]()
-    var tvShows = [TvShow]()
+    var movies = [TMDB]()
+    var tvShows = [TMDB]()
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -28,6 +28,15 @@ class TopTenViewController: UIViewController {
         createNavBar()
         getTopRatedMovies()
         getTopRatedTvShows()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Remove selection on tableview cell when navigating back from detailview
+        if let selectionIndexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: selectionIndexPath, animated: animated)
+        }
     }
     
     func createNavBar () {
@@ -46,6 +55,11 @@ class TopTenViewController: UIViewController {
         navigationItem.title = "Top Ten List"
     }
     
+    @IBAction func detailButton_TouchUpInside(_ sender: Any) {
+        performSegue(withIdentifier: "detail", sender: self)
+    }
+    
+    
     // Reload tableview on segmented control switch
     @IBAction func switchTableView(_ sender: Any) {
         tableView.reloadData()
@@ -53,7 +67,7 @@ class TopTenViewController: UIViewController {
     
     // Get top rated movies from TMDB, through Alamofire and swiftyJSON
     func getTopRatedMovies () {
-        Alamofire.request("https://api.themoviedb.org/3/movie/top_rated?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US").responseJSON {
+        Alamofire.request(Config.topRatedMoviesURL).responseJSON {
             response in
             
             switch response.result {
@@ -62,7 +76,7 @@ class TopTenViewController: UIViewController {
                 let posterRoot = Config.base_URL + Config.listPhotoSize
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
-                    let newMovie = Movie(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
+                    let newMovie = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
                                          title: SubJSON["title"].rawValue as! String,
                                          description: SubJSON["overview"].rawValue as! String)
 
@@ -74,11 +88,12 @@ class TopTenViewController: UIViewController {
                 print(error)
             }
         }
+        LocalStorage.shared.movies = movies
     }
     
     // Get top rated Tv Shows from TMDB, through Alamofire and swiftyJSON
     func getTopRatedTvShows () {
-        Alamofire.request("https://api.themoviedb.org/3/tv/top_rated?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US&page=1").responseJSON {
+        Alamofire.request(Config.topRatedTvShowsURL).responseJSON {
             response in
             
             switch response.result {
@@ -87,7 +102,7 @@ class TopTenViewController: UIViewController {
                 let posterRoot = Config.base_URL + Config.listPhotoSize
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
-                    let newTvShow = TvShow(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
+                    let newTvShow = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
                                         title: SubJSON["name"].rawValue as! String,
                                         description: SubJSON["overview"].rawValue as! String)
                     
@@ -107,27 +122,32 @@ class TopTenViewController: UIViewController {
 extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
+        if segue.identifier == "detail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-//                switch segmentControl.selectedSegmentIndex {
-//                case 0:
-////                    let movie = movies[indexPath.row]
-////                    let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-////                        controller.detailItem = movie
-////                        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-//                //                controller.navigationItem.leftItemsSupplementBackButton = true
-//                case 1:
-////                    let tvShow = movies[indexPath.row]
-////                    let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-////                        controller.detailItem = object
-////                        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-//                    //  controller.navigationItem.leftItemsSupplementBackButton = true
-//                default:
-//                    break
-//                }
-               
+                
+                
+                switch segmentControl.selectedSegmentIndex {
+
+                case 0:
+                    let movie = movies[indexPath.row]
+                    let controller = segue.destination  as! DetailViewController
+                    controller.tmdb = movie
+                    print("dino")
+
+                case 1:
+                    let tvShow = tvShows[indexPath.row]
+                    let controller = segue.destination as! DetailViewController
+                    controller.tmdb = tvShow
+                    
+                default:
+                    break
+                }
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "detail", sender: self)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -160,8 +180,9 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         case 0:
             let movie = movies[indexPath.row]
             let url = URL(string: movie.imageURL)!
-            cell.photo.kf.setImage(with: url)
+            
             cell.ranking.text = "\(indexPath.row + 1)"
+            cell.photo.kf.setImage(with: url)
             cell.photo.layer.cornerRadius = 10
             cell.photo.clipsToBounds = true
             cell.title.text = movie.title
@@ -170,10 +191,11 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         case 1:
             let tvShow = tvShows[indexPath.row]
             let url = URL(string: tvShow.imageURL)!
+            
+            cell.ranking.text = "\(indexPath.row + 1)"
             cell.photo.kf.setImage(with: url)
             cell.photo.layer.cornerRadius = 10
             cell.photo.clipsToBounds = true
-            cell.ranking.text = "\(indexPath.row + 1)"
             cell.title.text = tvShow.title
             cell.desc.text = tvShow.description
             
@@ -181,9 +203,5 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             break
         }
         return cell
-        
     }
-    
-   
-   
 }

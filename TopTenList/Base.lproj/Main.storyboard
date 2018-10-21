@@ -69,6 +69,9 @@
                                                     <state key="normal" title="&gt;">
                                                         <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="detailButton_TouchUpInside:" destination="tFA-pn-99H" eventType="touchUpInside" id="K7Q-6a-rbF"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -115,7 +118,7 @@
                     <connections>
                         <outlet property="segmentControl" destination="Rs7-qB-jgw" id="bKk-SI-w3u"/>
                         <outlet property="tableView" destination="YCs-jp-Q8C" id="mor-R6-cfZ"/>
-                        <segue destination="udu-HJ-fJt" kind="show" identifier="detailView" id="JA9-YW-A1Q"/>
+                        <segue destination="udu-HJ-fJt" kind="show" identifier="detail" id="sO0-ha-l9a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Day-ui-MaK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -139,7 +142,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BVV-DZ-OMs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="367" y="128"/>
+            <point key="canvasLocation" x="511" y="126"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="uiM-Kg-0a8">
@@ -184,6 +187,8 @@
                         <viewLayoutGuide key="safeArea" id="3eN-qq-8j2"/>
                     </view>
                     <connections>
+                        <outlet property="desc" destination="czn-m3-oeq" id="cfU-57-Z4x"/>
+                        <outlet property="header" destination="ZMe-cM-7er" id="ywl-Y8-Gaf"/>
                         <outlet property="image" destination="0i8-lQ-ufb" id="JTK-pV-TyQ"/>
                     </connections>
                 </viewController>

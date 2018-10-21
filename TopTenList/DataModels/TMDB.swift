@@ -1,5 +1,5 @@
 //
-//  TvShow.swift
+//  Movie.swift
 //  TopTenList
 //
 //  Created by Sabahudin Kodro on 20/10/2018.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TvShow: BasicInfoProtocol {
+struct TMDB{
     
     var imageURL: String
     
@@ -17,4 +17,3 @@ struct TvShow: BasicInfoProtocol {
     var description: String
     
 }
-

@@ -13,5 +13,7 @@ struct Config {
     static let base_URL = "https://image.tmdb.org/t/p"
     static let listPhotoSize = "/w200"
     static let detailPhotoSize = "/w300"
+    static let topRatedMoviesURL = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + Config.API_KEY
+    static let topRatedTvShowsURL = "https://api.themoviedb.org/3/tv/top_rated?api_key=" + Config.API_KEY
 }
 

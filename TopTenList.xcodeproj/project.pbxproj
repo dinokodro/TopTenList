@@ -13,10 +13,7 @@
 		9E414254217B62C900434905 /* TopTenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414253217B62C900434905 /* TopTenViewController.swift */; };
 		9E414256217B68F600434905 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414255217B68F600434905 /* CustomTableViewCell.swift */; };
 		9E41425B217B73C000434905 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41425A217B73C000434905 /* Config.swift */; };
-		9E41425F217B749A00434905 /* TvShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41425E217B749A00434905 /* TvShow.swift */; };
-		9E414261217B74A900434905 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414260217B74A900434905 /* Movie.swift */; };
-		9E414263217B7E9800434905 /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414262217B7E9800434905 /* LocalStorage.swift */; };
-		9E414266217B92FD00434905 /* BasicInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414265217B92FD00434905 /* BasicInfoProtocol.swift */; };
+		9E414261217B74A900434905 /* TMDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414260217B74A900434905 /* TMDB.swift */; };
 		9E630683217B450600D3C28A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E630682217B450600D3C28A /* AppDelegate.swift */; };
 		9E630688217B450600D3C28A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E630686217B450600D3C28A /* Main.storyboard */; };
 		9E63068A217B450800D3C28A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E630689217B450800D3C28A /* Assets.xcassets */; };
@@ -53,10 +50,7 @@
 		9E414253217B62C900434905 /* TopTenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTenViewController.swift; sourceTree = "<group>"; };
 		9E414255217B68F600434905 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		9E41425A217B73C000434905 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		9E41425E217B749A00434905 /* TvShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShow.swift; sourceTree = "<group>"; };
-		9E414260217B74A900434905 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
-		9E414262217B7E9800434905 /* LocalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
-		9E414265217B92FD00434905 /* BasicInfoProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicInfoProtocol.swift; sourceTree = "<group>"; };
+		9E414260217B74A900434905 /* TMDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDB.swift; sourceTree = "<group>"; };
 		9E63067F217B450600D3C28A /* TopTenList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TopTenList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E630682217B450600D3C28A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E630687217B450600D3C28A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -138,8 +132,7 @@
 		9E414257217B71A700434905 /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
-				9E41425E217B749A00434905 /* TvShow.swift */,
-				9E414260217B74A900434905 /* Movie.swift */,
+				9E414260217B74A900434905 /* TMDB.swift */,
 			);
 			path = DataModels;
 			sourceTree = "<group>";
@@ -172,8 +165,6 @@
 				9E630682217B450600D3C28A /* AppDelegate.swift */,
 				9E41425A217B73C000434905 /* Config.swift */,
 				9E414255217B68F600434905 /* CustomTableViewCell.swift */,
-				9E414262217B7E9800434905 /* LocalStorage.swift */,
-				9E414265217B92FD00434905 /* BasicInfoProtocol.swift */,
 				9E414257217B71A700434905 /* DataModels */,
 				9E630686217B450600D3C28A /* Main.storyboard */,
 				9E41424E217B593500434905 /* ViewControllers */,
@@ -452,13 +443,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E414261217B74A900434905 /* Movie.swift in Sources */,
-				9E41425F217B749A00434905 /* TvShow.swift in Sources */,
+				9E414261217B74A900434905 /* TMDB.swift in Sources */,
 				9E41424D217B592B00434905 /* DetailViewController.swift in Sources */,
 				9E414254217B62C900434905 /* TopTenViewController.swift in Sources */,
 				9E414256217B68F600434905 /* CustomTableViewCell.swift in Sources */,
-				9E414266217B92FD00434905 /* BasicInfoProtocol.swift in Sources */,
-				9E414263217B7E9800434905 /* LocalStorage.swift in Sources */,
 				9E630683217B450600D3C28A /* AppDelegate.swift in Sources */,
 				9E41425B217B73C000434905 /* Config.swift in Sources */,
 			);
