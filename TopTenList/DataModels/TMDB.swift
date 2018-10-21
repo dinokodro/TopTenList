@@ -12,6 +12,8 @@ struct TMDB{
     
     var imageURL: String
     
+    var rating: Double
+    
     var title: String
     
     var description: String

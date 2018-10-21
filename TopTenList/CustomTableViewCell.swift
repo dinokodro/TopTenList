@@ -19,6 +19,7 @@ class CustomTableViewCell: UITableViewCell {
     
     @IBOutlet weak var desc: UILabel!
     
+    @IBOutlet weak var rating: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

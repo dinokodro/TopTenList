@@ -54,7 +54,7 @@ class TopTenViewController: UIViewController {
         
         // Attach search controller to navbar
         navigationItem.searchController = searchController
-        navigationItem.title = "Top Ten List"
+        navigationItem.title = "TMDB top 10 ratings"
     }
     
     // Reload tableview on segmented control switch
@@ -74,8 +74,9 @@ class TopTenViewController: UIViewController {
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
                     let newMovie = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
-                                         title: SubJSON["title"].rawValue as! String,
-                                         description: SubJSON["overview"].rawValue as! String)
+                                        rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
+                                        title: SubJSON["title"].rawValue as! String,
+                                        description: SubJSON["overview"].rawValue as! String)
 
                     self.movies.append(newMovie)
                 }
@@ -99,8 +100,9 @@ class TopTenViewController: UIViewController {
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
                     let newTvShow = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
-                                        title: SubJSON["name"].rawValue as! String,
-                                        description: SubJSON["overview"].rawValue as! String)
+                                         rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
+                                         title: SubJSON["name"].rawValue as! String,
+                                         description: SubJSON["overview"].rawValue as! String)
                     
                     self.tvShows.append(newTvShow)
                 }
@@ -189,6 +191,7 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         cell.photo.kf.setImage(with: url)
         cell.photo.layer.cornerRadius = 10
         cell.photo.clipsToBounds = true
+        cell.rating.text = "\(tmdb.rating)"
         cell.title.text = tmdb.title
         cell.desc.text = tmdb.description
         

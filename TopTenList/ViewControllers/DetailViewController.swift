@@ -15,12 +15,14 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var header: UILabel!
     
-    @IBOutlet weak var desc: UILabel!
+    @IBOutlet weak var desc: UITextView!
     
-        
+    @IBOutlet weak var rating: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        navigationItem.title = "Description"
         // Do any additional setup after loading the view.
     }
     
@@ -38,6 +40,9 @@ class DetailViewController: UIViewController {
                 label.kf.setImage(with: url)
                 label.layer.cornerRadius = 10
                 label.clipsToBounds = true
+            }
+            if let label = rating {
+                label.text = "Rating: \(detail.rating)"
             }
         }
     }
