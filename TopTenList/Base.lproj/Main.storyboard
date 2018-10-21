@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Rs7-qB-jgw">
-                                <rect key="frame" x="16" y="74" width="343" height="29"/>
+                                <rect key="frame" x="16" y="64" width="343" height="29"/>
                                 <segments>
                                     <segment title="Movies"/>
                                     <segment title="Tv Shows"/>
@@ -28,7 +28,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YCs-jp-Q8C">
-                                <rect key="frame" x="0.0" y="112" width="375" height="555"/>
+                                <rect key="frame" x="0.0" y="102" width="375" height="565"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="customCell" rowHeight="80" id="Iof-Ae-tdS" customClass="CustomTableViewCell" customModule="TopTenList" customModuleProvider="target">
@@ -63,16 +63,12 @@
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZu-hF-T14">
-                                                    <rect key="frame" x="329" y="21" width="30" height="47"/>
-                                                    <fontDescription key="fontDescription" name="AlNile" family="Al Nile" pointSize="25"/>
-                                                    <state key="normal" title="&gt;">
-                                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="detailButton_TouchUpInside:" destination="tFA-pn-99H" eventType="touchUpInside" id="K7Q-6a-rbF"/>
-                                                    </connections>
-                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7xN-m9-wre">
+                                                    <rect key="frame" x="348" y="20" width="11" height="54"/>
+                                                    <fontDescription key="fontDescription" name="DiwanMishafi" family="Mishafi" pointSize="37"/>
+                                                    <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
@@ -81,12 +77,12 @@
                                                 <constraint firstItem="hN9-6c-d2F" firstAttribute="top" secondItem="2EU-kk-IXF" secondAttribute="top" constant="12" id="8ab-tZ-aH1"/>
                                                 <constraint firstItem="hN9-6c-d2F" firstAttribute="leading" secondItem="jSN-h7-rWg" secondAttribute="trailing" constant="12" id="CES-gJ-ekg"/>
                                                 <constraint firstItem="jQ1-Px-d35" firstAttribute="centerY" secondItem="2EU-kk-IXF" secondAttribute="centerY" id="E2C-pt-EHk"/>
-                                                <constraint firstItem="fZu-hF-T14" firstAttribute="top" secondItem="2EU-kk-IXF" secondAttribute="topMargin" constant="10" id="Gvl-Ni-4k5"/>
                                                 <constraint firstItem="GXh-VN-PVp" firstAttribute="leading" secondItem="jQ1-Px-d35" secondAttribute="trailing" constant="51" id="J29-YW-mi9"/>
                                                 <constraint firstItem="jSN-h7-rWg" firstAttribute="leading" secondItem="jQ1-Px-d35" secondAttribute="trailing" constant="18" id="Ml5-kO-YyZ"/>
-                                                <constraint firstAttribute="trailing" secondItem="fZu-hF-T14" secondAttribute="trailing" constant="16" id="NUC-md-RT5"/>
                                                 <constraint firstItem="jQ1-Px-d35" firstAttribute="leading" secondItem="2EU-kk-IXF" secondAttribute="leading" constant="25" id="Nvl-dn-7mb"/>
+                                                <constraint firstItem="7xN-m9-wre" firstAttribute="top" secondItem="2EU-kk-IXF" secondAttribute="top" constant="20" id="TML-YJ-O3N"/>
                                                 <constraint firstItem="jSN-h7-rWg" firstAttribute="top" secondItem="2EU-kk-IXF" secondAttribute="top" constant="11" id="YLj-pM-zCc"/>
+                                                <constraint firstAttribute="trailing" secondItem="7xN-m9-wre" secondAttribute="trailing" constant="16" id="fy8-O0-6ot"/>
                                                 <constraint firstAttribute="trailing" secondItem="hN9-6c-d2F" secondAttribute="trailing" constant="40" id="ntn-lp-bqi"/>
                                                 <constraint firstAttribute="trailing" secondItem="GXh-VN-PVp" secondAttribute="trailing" constant="55" id="xBt-Zm-bda"/>
                                             </constraints>
@@ -105,7 +101,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Rs7-qB-jgw" firstAttribute="leading" secondItem="xgB-cD-Emo" secondAttribute="leading" constant="16" id="1Hl-x0-9LN"/>
-                            <constraint firstItem="Rs7-qB-jgw" firstAttribute="top" secondItem="xgB-cD-Emo" secondAttribute="top" constant="10" id="3DI-3h-rRO"/>
+                            <constraint firstItem="Rs7-qB-jgw" firstAttribute="top" secondItem="xgB-cD-Emo" secondAttribute="top" id="3DI-3h-rRO"/>
                             <constraint firstItem="YCs-jp-Q8C" firstAttribute="leading" secondItem="xgB-cD-Emo" secondAttribute="leading" id="FdH-Q8-eco"/>
                             <constraint firstItem="YCs-jp-Q8C" firstAttribute="bottom" secondItem="xgB-cD-Emo" secondAttribute="bottom" id="Qsi-EW-skg"/>
                             <constraint firstItem="YCs-jp-Q8C" firstAttribute="trailing" secondItem="xgB-cD-Emo" secondAttribute="trailing" id="uYT-l1-BKX"/>
@@ -118,7 +114,7 @@
                     <connections>
                         <outlet property="segmentControl" destination="Rs7-qB-jgw" id="bKk-SI-w3u"/>
                         <outlet property="tableView" destination="YCs-jp-Q8C" id="mor-R6-cfZ"/>
-                        <segue destination="udu-HJ-fJt" kind="show" identifier="detail" id="sO0-ha-l9a"/>
+                        <segue destination="udu-HJ-fJt" kind="show" identifier="detailView" id="sO0-ha-l9a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Day-ui-MaK" userLabel="First Responder" sceneMemberID="firstResponder"/>

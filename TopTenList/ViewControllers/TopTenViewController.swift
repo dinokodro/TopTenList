@@ -13,7 +13,6 @@ import Kingfisher
 
 class TopTenViewController: UIViewController {
     
-    var detailViewController: DetailViewController? = nil
     var movies = [TMDB]()
     var tvShows = [TMDB]()
 
@@ -25,7 +24,7 @@ class TopTenViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
-        createNavBar()
+        customizeNavBar()
         getTopRatedMovies()
         getTopRatedTvShows()
     }
@@ -39,11 +38,14 @@ class TopTenViewController: UIViewController {
         }
     }
     
-    func createNavBar () {
+    // Customize navbvar to prefer large titles and attach searchResultsController
+    func customizeNavBar () {
         
         //Set Large Titles
         navigationController?.navigationBar.prefersLargeTitles = true
-
+        // Remove shadow
+        navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
+        
         // Create Search controller
         let searchController = UISearchController(searchResultsController: nil)
         let searchBar = searchController.searchBar
@@ -54,11 +56,6 @@ class TopTenViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.title = "Top Ten List"
     }
-    
-    @IBAction func detailButton_TouchUpInside(_ sender: Any) {
-        performSegue(withIdentifier: "detail", sender: self)
-    }
-    
     
     // Reload tableview on segmented control switch
     @IBAction func switchTableView(_ sender: Any) {
@@ -114,14 +111,14 @@ class TopTenViewController: UIViewController {
             }
         }
     }
-    
 }
 
 // Extension of TopTenViewController dealing with table related tasks
 extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     
+    // Prepare for segue based on which button on segment index is selected
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "detail" {
+        if segue.identifier == "detailView" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 
                 var tmdb = movies[indexPath.row]
@@ -143,8 +140,9 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         }
     }
     
+    // Perform segue to detailview
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "detail", sender: self)
+        performSegue(withIdentifier: "detailView", sender: self)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
