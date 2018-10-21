@@ -25,7 +25,7 @@ Newest Xcode (Version 10.0 used for this project) and a Mac
 2. Click on "Open in Xcode". Save it to the desired location on your computer.
 ```
 ```
-3. The computer the project in Xcode automatically.
+3. The computer opens the project in Xcode automatically.
 ```
 ```
 4. Select the desired iOS simulator and press the "play" button. This launches the application. 
