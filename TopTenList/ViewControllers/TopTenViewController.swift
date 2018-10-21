@@ -22,6 +22,7 @@ class TopTenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.dataSource = self
         tableView.delegate = self
         createNavBar()
@@ -31,24 +32,26 @@ class TopTenViewController: UIViewController {
     
     func createNavBar () {
         
+        //Set Large Titles
         navigationController?.navigationBar.prefersLargeTitles = true
 
+        // Create Search controller
         let searchController = UISearchController(searchResultsController: nil)
         let searchBar = searchController.searchBar
         searchBar.showsCancelButton = false
         searchBar.placeholder = "Search"
         
+        // Attach search controller to navbar
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.title = "Top Ten List"
     }
     
-    
+    // Reload tableview on segmented control switch
     @IBAction func switchTableView(_ sender: Any) {
         tableView.reloadData()
     }
     
-
+    // Get top rated movies from TMDB, through Alamofire and swiftyJSON
     func getTopRatedMovies () {
         Alamofire.request("https://api.themoviedb.org/3/movie/top_rated?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US").responseJSON {
             response in
@@ -73,6 +76,7 @@ class TopTenViewController: UIViewController {
         }
     }
     
+    // Get top rated Tv Shows from TMDB, through Alamofire and swiftyJSON
     func getTopRatedTvShows () {
         Alamofire.request("https://api.themoviedb.org/3/tv/top_rated?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US&page=1").responseJSON {
             response in
@@ -99,7 +103,7 @@ class TopTenViewController: UIViewController {
 
 }
 
-
+// Extension of TopTenViewController dealing with table-related tasks
 extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -132,10 +136,13 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch segmentControl.selectedSegmentIndex {
+            
         case 0:
             return movies.count
+            
         case 1:
             return tvShows.count
+            
         default:
             break
         }
@@ -145,14 +152,15 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         switch segmentControl.selectedSegmentIndex {
+            
         case 0:
             let movie = movies[indexPath.row]
             let url = URL(string: movie.imageURL)!
             cell.photo.kf.setImage(with: url)
-            
             cell.ranking.text = "\(indexPath.row + 1)"
             cell.title.text = movie.title
             cell.desc.text = movie.description
+            
         case 1:
             let tvShow = tvShows[indexPath.row]
             let url = URL(string: tvShow.imageURL)!
@@ -160,6 +168,7 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             cell.ranking.text = "\(indexPath.row + 1)"
             cell.title.text = tvShow.title
             cell.desc.text = tvShow.description
+            
         default:
             break
         }
