@@ -100,7 +100,7 @@ class TopTenViewController: UIViewController {
             }
         }
     }
-
+    
 }
 
 // Extension of TopTenViewController dealing with table-related tasks
@@ -128,6 +128,10 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
                
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -158,6 +162,8 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             let url = URL(string: movie.imageURL)!
             cell.photo.kf.setImage(with: url)
             cell.ranking.text = "\(indexPath.row + 1)"
+            cell.photo.layer.cornerRadius = 10
+            cell.photo.clipsToBounds = true
             cell.title.text = movie.title
             cell.desc.text = movie.description
             
@@ -165,6 +171,8 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             let tvShow = tvShows[indexPath.row]
             let url = URL(string: tvShow.imageURL)!
             cell.photo.kf.setImage(with: url)
+            cell.photo.layer.cornerRadius = 10
+            cell.photo.clipsToBounds = true
             cell.ranking.text = "\(indexPath.row + 1)"
             cell.title.text = tvShow.title
             cell.desc.text = tvShow.description
@@ -173,6 +181,9 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             break
         }
         return cell
+        
     }
     
+   
+   
 }
