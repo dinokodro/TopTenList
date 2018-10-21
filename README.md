@@ -1,7 +1,7 @@
 # TopTenList
 
-Simple application with Top 10 rated movies and tv shows from the The Movie Database (https://www.themoviedb.org/). 
-A search feature is also implemented
+Simple application showing Top 10 rated movies and tv shows from the The Movie Database (https://www.themoviedb.org/). 
+A search feature which allows for searching of movies and tv shows from the whole database (not just the lists) is also implemented.
 
 ## Getting Started
 
