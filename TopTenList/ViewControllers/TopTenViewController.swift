@@ -16,6 +16,8 @@ class TopTenViewController: UIViewController {
     
     var movies = [TMDB]()
     var tvShows = [TMDB]()
+    var filteredMovies = [TMDB]()
+    var filteredTvShows = [TMDB]()
     let arraySize = 10
 
     @IBOutlet weak var tableView: UITableView!
@@ -29,6 +31,7 @@ class TopTenViewController: UIViewController {
         customizeNavBar()
         getTopRatedMovies()
         getTopRatedTvShows()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,9 +53,12 @@ class TopTenViewController: UIViewController {
         
         // Create Search controller
         let searchController = UISearchController(searchResultsController: nil)
-        let searchBar = searchController.searchBar
-        searchBar.showsCancelButton = false
-        searchBar.placeholder = "Search"
+        searchController.delegate = self
+        searchController.searchBar.showsCancelButton = false
+        searchController.searchBar.placeholder = "Search"
+        searchController.searchBar.delegate = self
+        searchController.searchBar.showsScopeBar = true
+        
         
         // Attach search controller to navbar
         navigationItem.searchController = searchController
@@ -125,6 +131,91 @@ class TopTenViewController: UIViewController {
             }
         }
     }
+    
+    func searchMovies (query: String){
+        Alamofire.request("https://api.themoviedb.org/3/search/movie?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US&query=\(query)&page=1&include_adult=false").responseJSON {
+            response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                let posterRoot = Config.base_URL + Config.photoSize
+                
+                for(_, SubJSON):(String, JSON) in json["results"]{
+                    
+                    let newMovie = TMDB(imageURL: posterRoot + "\(SubJSON["poster_path"])",
+                                         rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
+                                         title: SubJSON["title"].rawValue as! String,
+                                         description: SubJSON["overview"].rawValue as! String)
+                    self.filteredMovies.append(newMovie)
+                }
+                self.tableView.reloadData()
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func searchTvShows (query: String){
+        Alamofire.request("https://api.themoviedb.org/3/search/tv?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US&query=\(query)&page=1&include_adult=false").responseJSON {
+            response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                //print(json)
+                let posterRoot = Config.base_URL + Config.photoSize
+                
+                for(_, SubJSON):(String, JSON) in json["results"]{
+                    
+                    let newTvShow = TMDB(imageURL: posterRoot + "\(SubJSON["poster_path"])",
+                        rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
+                        title: SubJSON["name"].rawValue as! String,
+                        description: SubJSON["overview"].rawValue as! String)
+                    self.filteredTvShows.append(newTvShow)
+                }
+                self.tableView.reloadData()
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func clearSearchFilters(){
+        filteredTvShows = []
+        filteredMovies = []
+        tableView.reloadData()
+    }
+    
+    func moviesFilterIsGreaterThanZero() -> Bool{
+        if filteredMovies.count > 0 { return true }
+        else {return  false }
+    }
+    
+    func searchTextCountIsGreaterThanTwo (searchText: String) -> Bool{
+        if searchText.count > 2 {
+            return true
+        }
+        else { return false }
+    }
+    
+    func segmentedControlIndexIsZero() -> Bool {
+        if segmentControl.selectedSegmentIndex == 0 {
+            return true
+        }
+        else { return false }
+    }
+    
+    func createCell(cell: CustomTableViewCell, tmdb: TMDB, index: Int, url: URL) -> CustomTableViewCell{
+        cell.ranking.text = "\(index + 1)"
+        cell.photo.kf.setImage(with: url)
+        cell.photo.layer.cornerRadius = 10
+        cell.photo.clipsToBounds = true
+        cell.rating.text = "\(tmdb.rating)"
+        cell.title.text = tmdb.title
+        cell.desc.text = tmdb.description
+        return cell
+    }
 }
 
 // Extension of TopTenViewController dealing with table related tasks
@@ -140,7 +231,7 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
                 switch segmentControl.selectedSegmentIndex {
                 case 0:
                     tmdb = movies[indexPath.row]
-                    
+
                 case 1:
                     tmdb = tvShows[indexPath.row]
                     
@@ -153,6 +244,8 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             }
         }
     }
+    
+    
     
     // Perform segue to detailview
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -171,8 +264,11 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         
         switch segmentControl.selectedSegmentIndex {
         case 0:
+            if !filteredMovies.isEmpty {
+                return filteredMovies.count
+            }
+            else { return movies.count}
             return movies.count
-            
         case 1:
             return tvShows.count
             
@@ -185,28 +281,44 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         
-        var tmdb = movies[indexPath.row]
-        
-        switch segmentControl.selectedSegmentIndex {
-        case 0:
-            tmdb = movies[indexPath.row]
-            
-        case 1:
-            tmdb = tvShows[indexPath.row]
-        default:
-            break
+        guard segmentedControlIndexIsZero() else {
+            let tvShow = tvShows[indexPath.row]
+            let url = URL(string: tvShow.imageURL)!
+            return createCell(cell: cell, tmdb: tvShow, index: indexPath.row, url: url)
         }
         
-        let url = URL(string: tmdb.imageURL)!
-
-        cell.ranking.text = "\(indexPath.row + 1)"
-        cell.photo.kf.setImage(with: url)
-        cell.photo.layer.cornerRadius = 10
-        cell.photo.clipsToBounds = true
-        cell.rating.text = "\(tmdb.rating)"
-        cell.title.text = tmdb.title
-        cell.desc.text = tmdb.description
+        guard moviesFilterIsGreaterThanZero() else {
+            let movie = movies[indexPath.row]
+            let url = URL(string: movie.imageURL)!
+            return createCell(cell: cell, tmdb: movie, index: indexPath.row, url: url)
+        }
         
-        return cell
+        let filteredMovie = filteredMovies[indexPath.row]
+        let url = URL(string: filteredMovie.imageURL)!
+        return createCell(cell: cell, tmdb: filteredMovie, index: indexPath.row, url: url)
+        
+    }
+}
+
+extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        guard searchTextCountIsGreaterThanTwo(searchText: searchText) else {
+            clearSearchFilters()
+            return
+        }
+
+        guard segmentedControlIndexIsZero() else {
+            self.searchTvShows(query: searchText)
+            tableView.reloadData()
+            return
+        }
+
+        clearSearchFilters()
+        self.searchMovies(query: searchText)
+        tableView.reloadData()
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
     }
 }
