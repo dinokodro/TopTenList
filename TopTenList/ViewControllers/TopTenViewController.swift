@@ -10,11 +10,13 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Kingfisher
+import Promises
 
 class TopTenViewController: UIViewController {
     
     var movies = [TMDB]()
     var tvShows = [TMDB]()
+    let arraySize = 10
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -67,10 +69,12 @@ class TopTenViewController: UIViewController {
         Alamofire.request(Config.topRatedMoviesURL).responseJSON {
             response in
             
+            var count = 0
+            
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                let posterRoot = Config.base_URL + Config.listPhotoSize
+                let posterRoot = Config.base_URL + Config.photoSize
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
                     let newMovie = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
@@ -78,7 +82,11 @@ class TopTenViewController: UIViewController {
                                         title: SubJSON["title"].rawValue as! String,
                                         description: SubJSON["overview"].rawValue as! String)
 
-                    self.movies.append(newMovie)
+                    if count < self.arraySize {
+                        self.movies.append(newMovie)
+                    }
+                    else { break }
+                    count += 1
                 }
                 self.tableView.reloadData()
                 
@@ -89,14 +97,14 @@ class TopTenViewController: UIViewController {
     }
     
     // Get top rated Tv Shows from TMDB, through Alamofire and swiftyJSON
-    func getTopRatedTvShows () {
+    func getTopRatedTvShows (){
         Alamofire.request(Config.topRatedTvShowsURL).responseJSON {
             response in
-            
+            var count = 0
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                let posterRoot = Config.base_URL + Config.listPhotoSize
+                let posterRoot = Config.base_URL + Config.photoSize
                 
                 for(_, SubJSON):(String, JSON) in json["results"]{
                     let newTvShow = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
@@ -104,7 +112,11 @@ class TopTenViewController: UIViewController {
                                          title: SubJSON["name"].rawValue as! String,
                                          description: SubJSON["overview"].rawValue as! String)
                     
-                    self.tvShows.append(newTvShow)
+                    if count < self.arraySize {
+                        self.tvShows.append(newTvShow)
+                    }
+                    else { break }
+                    count += 1
                 }
                 self.tableView.reloadData()
                 
