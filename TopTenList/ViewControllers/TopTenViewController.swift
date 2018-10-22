@@ -19,6 +19,7 @@ class TopTenViewController: UIViewController {
     var filteredMovies = [TMDB]()
     var filteredTvShows = [TMDB]()
     let arraySize = 10
+    var searchText: String?
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -187,11 +188,6 @@ class TopTenViewController: UIViewController {
         tableView.reloadData()
     }
     
-    func moviesFilterIsGreaterThanZero() -> Bool{
-        if filteredMovies.count > 0 { return true }
-        else {return  false }
-    }
-    
     func searchTextCountIsGreaterThanTwo (searchText: String) -> Bool{
         if searchText.count > 2 {
             return true
@@ -226,21 +222,27 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         if segue.identifier == "detailView" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 
-                var tmdb = movies[indexPath.row]
+                let controller = segue.destination  as! DetailViewController
                 
                 switch segmentControl.selectedSegmentIndex {
+                    
                 case 0:
-                    tmdb = movies[indexPath.row]
-
+                    guard !filteredMovies.isEmpty else {
+                        controller.tmdb = movies[indexPath.row]
+                        return
+                    }
+                    controller.tmdb = filteredMovies[indexPath.row]
+                    
                 case 1:
-                    tmdb = tvShows[indexPath.row]
+                    guard !filteredTvShows.isEmpty else {
+                        controller.tmdb = tvShows[indexPath.row]
+                        return
+                    }
+                    controller.tmdb = filteredTvShows[indexPath.row]
                     
                 default:
                     break
                 }
-                
-                let controller = segue.destination  as! DetailViewController
-                controller.tmdb = tmdb
             }
         }
     }
@@ -264,13 +266,16 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         
         switch segmentControl.selectedSegmentIndex {
         case 0:
-            if !filteredMovies.isEmpty {
-                return filteredMovies.count
+            guard !filteredMovies.isEmpty else {
+                return movies.count
             }
-            else { return movies.count}
-            return movies.count
+            return filteredMovies.count
+            
         case 1:
-            return tvShows.count
+            guard !filteredTvShows.isEmpty else {
+                return tvShows.count
+            }
+            return filteredTvShows.count
             
         default:
             break
@@ -281,28 +286,39 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         
-        guard segmentedControlIndexIsZero() else {
-            let tvShow = tvShows[indexPath.row]
-            let url = URL(string: tvShow.imageURL)!
-            return createCell(cell: cell, tmdb: tvShow, index: indexPath.row, url: url)
+        switch segmentControl.selectedSegmentIndex {
+        case 0:
+            guard !filteredMovies.isEmpty else {
+                let movie = movies[indexPath.row]
+                let url = URL(string: movie.imageURL)!
+                return createCell(cell: cell, tmdb: movie, index: indexPath.row, url: url)
+            }
+            
+            let filteredMovie = filteredMovies[indexPath.row]
+            let url = URL(string: filteredMovie.imageURL)!
+            return createCell(cell: cell, tmdb: filteredMovie, index: indexPath.row, url: url)
+            
+        case 1:
+            guard !filteredTvShows.isEmpty else {
+                let tvShow = tvShows[indexPath.row]
+                let url = URL(string: tvShow.imageURL)!
+                return createCell(cell: cell, tmdb: tvShow, index: indexPath.row, url: url)
+            }
+            
+            let filteredTvShow = filteredTvShows[indexPath.row]
+            let url = URL(string: filteredTvShow.imageURL)!
+            return createCell(cell: cell, tmdb: filteredTvShow, index: indexPath.row, url: url)
+            
+        default:
+            return cell
         }
-        
-        guard moviesFilterIsGreaterThanZero() else {
-            let movie = movies[indexPath.row]
-            let url = URL(string: movie.imageURL)!
-            return createCell(cell: cell, tmdb: movie, index: indexPath.row, url: url)
-        }
-        
-        let filteredMovie = filteredMovies[indexPath.row]
-        let url = URL(string: filteredMovie.imageURL)!
-        return createCell(cell: cell, tmdb: filteredMovie, index: indexPath.row, url: url)
-        
     }
 }
 
 extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
+        self.searchText = searchText
         guard searchTextCountIsGreaterThanTwo(searchText: searchText) else {
             clearSearchFilters()
             return
@@ -320,5 +336,8 @@ extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        if self.searchText != nil {
+            searchBar.text = self.searchText
+        }
     }
 }
