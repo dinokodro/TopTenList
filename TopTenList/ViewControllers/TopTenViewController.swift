@@ -58,8 +58,6 @@ class TopTenViewController: UIViewController {
         searchController.searchBar.showsCancelButton = false
         searchController.searchBar.placeholder = "Search"
         searchController.searchBar.delegate = self
-        searchController.searchBar.showsScopeBar = true
-        
         
         // Attach search controller to navbar
         navigationItem.searchController = searchController
@@ -316,22 +314,25 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
 }
 
 extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
+
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         self.searchText = searchText
+        let formattedSearchText = searchText.replacingOccurrences(of: " ", with: "%20")
         guard searchTextCountIsGreaterThanTwo(searchText: searchText) else {
             clearSearchFilters()
             return
         }
 
         guard segmentedControlIndexIsZero() else {
-            self.searchTvShows(query: searchText)
+            self.searchTvShows(query: formattedSearchText)
             tableView.reloadData()
             return
         }
 
         clearSearchFilters()
-        self.searchMovies(query: searchText)
+        self.searchMovies(query: formattedSearchText)
         tableView.reloadData()
     }
     
@@ -340,4 +341,17 @@ extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
             searchBar.text = self.searchText
         }
     }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        // MARK -- The text does not persist in the searchbar during the search bar animation. This is only the case after pressing the search button. Therefore, this has no effect:
+        searchController.searchBar.text = self.searchText
+    }
+    
+    func didDismissSearchController(_ searchController: UISearchController) {
+        navigationItem.hidesSearchBarWhenScrolling = true
+        searchController.searchBar.text = self.searchText
+    }
+
+   
+    
 }
