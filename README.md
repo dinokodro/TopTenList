@@ -33,3 +33,8 @@ Newest Xcode (Version 10.0 used for this project) and a Mac
 ```
 5. That´s it! Explore the app! 
 ```
+
+### Note
+The reason why I added the scope bar through the storyboard, and not programatically is that there is some problems with the animation regarding showing and dismissing the scopebar (it either dissapears completely or overlays the searchbar), which makes for a bad UI experience. This is probably some Xcode version 10.0 bug.
+
+Since I added the scope bar through the storyboard, the searchbar does not go to the top automatically when scrolling the table, as it would have if it was programatically attached to the searchbar in the navigation item. However, because of the mentioned bug, this was the best solution I found. 
