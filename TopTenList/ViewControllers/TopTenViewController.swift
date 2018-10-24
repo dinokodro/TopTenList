@@ -85,6 +85,7 @@ class TopTenViewController: UIViewController {
 
     func setSearchBarPlaceholder() {
         searchController.searchBar.text = ""
+        addScopeButtomBorder(withColor: UIColor.white)
         if segmentControl.selectedSegmentIndex == 0 {
             searchController.searchBar.placeholder = "Search Tv Shows"
         }
@@ -101,19 +102,11 @@ class TopTenViewController: UIViewController {
         clearSearchFilters()
     }
 
-    func addScopeButtomBorder() {
+    func addScopeButtomBorder(withColor: UIColor) {
         let scopeBarHeight = segmentControl.frame.height
         let bottomLine = CALayer()
         bottomLine.frame = CGRect(x: -1000, y: scopeBarHeight + 8, width: 5000, height: 0.5)
-        bottomLine.backgroundColor = UIColor.lightGray.cgColor
-        segmentControl.layer.addSublayer(bottomLine)
-    }
-
-    func removeScopeButtomBorder() {
-        let scopeBarHeight = segmentControl.frame.height
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: -1000, y: scopeBarHeight + 8, width: 5000, height: 0.5)
-        bottomLine.backgroundColor = UIColor.white.cgColor
+        bottomLine.backgroundColor = withColor.cgColor
         segmentControl.layer.addSublayer(bottomLine)
     }
 
@@ -123,42 +116,29 @@ class TopTenViewController: UIViewController {
         tableView.reloadData()
     }
 
-    func searchTextCountIsGreaterThanTwo (searchText: String) -> Bool{
-        guard searchText.count > 2 else {
-            return false
-        }
-        return true
-    }
-
-    func segmentedControlIndexIsZero() -> Bool {
-        guard segmentControl.selectedSegmentIndex == 0 else {
-            return false
-        }
-        return true
-    }
-
     func createMovieCell(cell: CustomTableViewCell, movie: Movie, index: Int) -> CustomTableViewCell{
         
         var urlString = ""
         
         if movie.poster_path != nil {
             urlString = Config.basePhotoUrl + movie.poster_path!
+            let url = URL(string: urlString)!
+            cell.photo.kf.setImage(with: url)
         } else {
             urlString = "default_image.png"
+            cell.photo.image = UIImage(named: urlString)
         }
-        let url = URL(string: urlString)!
         
         cell.ranking.text = "\(index + 1)"
-        cell.photo.kf.setImage(with: url)
         cell.photo.layer.cornerRadius = 10
         cell.photo.clipsToBounds = true
         cell.rating.text = "\(movie.vote_average!)"
-        cell.title.text = movie.title!
-        cell.desc.text = movie.overview!
+        cell.title.text = movie.title ?? "No title"
+        cell.desc.text = movie.overview ?? "No Description"
         return cell
     }
     
-    func createTvShowCell(cell: CustomTableViewCell, tvShow: TvShow, index: Int) -> CustomTableViewCell{
+    func createTvShowCell(cell: CustomTableViewCell, tvShow: TvShow , index: Int) -> CustomTableViewCell{
         
         var urlString = ""
         
@@ -174,8 +154,8 @@ class TopTenViewController: UIViewController {
         cell.photo.layer.cornerRadius = 10
         cell.photo.clipsToBounds = true
         cell.rating.text = "\(tvShow.vote_average!)"
-        cell.title.text = tvShow.name!
-        cell.desc.text = tvShow.overview!
+        cell.title.text = tvShow.name ?? "No title"
+        cell.desc.text = tvShow.overview ?? "No Description"
         return cell
     }
 }
@@ -213,8 +193,6 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         }
     }
 
-
-
     // Perform segue to detailview
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "detailView", sender: self)
@@ -238,16 +216,16 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             lastVelocityYSign = currentVelocityYSign
         }
         if lastVelocityYSign < 0 {
-            addScopeButtomBorder()
+            addScopeButtomBorder(withColor: UIColor.lightGray)
 
         }
         else if lastVelocityYSign > 0 {
-            removeScopeButtomBorder()
+            addScopeButtomBorder(withColor: UIColor.white)
         }
     }
     
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        removeScopeButtomBorder()
+         addScopeButtomBorder(withColor: UIColor.white)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -277,14 +255,31 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         switch segmentControl.selectedSegmentIndex {
         case 0:
             guard !filteredTvShows.isEmpty else {
-                
                 let tvShow = tvShows[indexPath.row]
                 return createTvShowCell(cell: cell, tvShow: tvShow, index: indexPath.row)
-                
             }
 
-            let filteredTvShow = filteredTvShows[indexPath.row]
-            return createTvShowCell(cell: cell, tvShow: filteredTvShow, index: indexPath.row)
+            let tvShow = filteredTvShows[indexPath.row]
+            //return createTvShowCell(cell: cell, tvShow: filteredTvShow, index: indexPath.row)
+            
+            var urlString = ""
+            
+            if tvShow.poster_path != nil {
+                urlString = Config.basePhotoUrl + tvShow.poster_path!
+            } else {
+                urlString = "default_image.png"
+            }
+            let url = URL(string: urlString)!
+            
+            cell.ranking.text = "\(indexPath.row + 1)"
+            cell.photo.kf.setImage(with: url)
+            cell.photo.layer.cornerRadius = 10
+            cell.photo.clipsToBounds = true
+            cell.rating.text = "\(tvShow.vote_average!)"
+            cell.title.text = tvShow.name ?? "No title"
+            cell.desc.text = tvShow.overview ?? "No Description"
+            print(tvShow.overview ?? "No description")
+            return cell
             
         case 1:
             guard !filteredMovies.isEmpty else {
@@ -303,49 +298,45 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
 
 extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
 
-
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 
         self.searchText = searchText
         let formattedSearchText = searchText.replacingOccurrences(of: " ", with: "%20")
-        guard searchTextCountIsGreaterThanTwo(searchText: searchText) else {
+        guard searchText.count > 2 else {
             clearSearchFilters()
             return
         }
-
-        guard segmentedControlIndexIsZero() else {
+        
+        switch segmentControl.selectedSegmentIndex{
+        case 0:
+            ApiManager.shared.searchTopRatedTvShows(query: formattedSearchText).done({ filteredTvShows in
+                self.clearSearchFilters()
+                self.filteredTvShows = filteredTvShows
+                self.tableView.reloadData()
+            }).catch { error in
+                self.clearSearchFilters()
+                print(error.localizedDescription)
+            }
+            
+        case 1:
             ApiManager.shared.searchMovies(query: formattedSearchText).done( { filteredMovies in
                 self.clearSearchFilters()
                 self.filteredMovies = filteredMovies
                 self.tableView.reloadData()
-            })
-            .catch { error in
+            }).catch { error in
                 self.clearSearchFilters()
-                //Handle error or give feedback to the user
                 print(error.localizedDescription)
             }
-            return
-        }
-        ApiManager.shared.searchTopRatedTvShows(query: formattedSearchText).done({ filteredTvShows in
-            self.clearSearchFilters()
-            self.filteredTvShows = filteredTvShows
-            self.tableView.reloadData()
-        }).catch { error in
-            print(error)
-        }
-        
 
+        default:
+            break
+        }
     }
 
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         if self.searchText != nil {
             searchBar.text = self.searchText
         }
-    }
-
-    func willDismissSearchController(_ searchController: UISearchController) {
-        // MARK -- The text does not persist in the searchbar during the search bar animation. This is only the case after pressing the search button. Therefore, this has no effect:
-        searchController.searchBar.text = self.searchText
     }
 
     func didDismissSearchController(_ searchController: UISearchController) {
