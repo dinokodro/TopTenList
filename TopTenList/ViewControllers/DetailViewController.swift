@@ -19,6 +19,8 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var rating: UILabel!
     
+    var photoURL = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -28,26 +30,69 @@ class DetailViewController: UIViewController {
     
     func configureView() {
         // Update the user interface for the detail item.
-        if let detail = tmdb {
+        if let detail = movie {
             if let label = header {
-                label.text = "\(detail.title)"
+                label.text = "\(detail.title ?? "No title")"
             }
             if let label = desc {
-                label.text = detail.description
+                label.text = detail.overview ?? "No description"
             }
             if let label = image {
-                let url = URL(string: detail.imageURL)!
-                label.kf.setImage(with: url)
+                
+                if detail.poster_path == nil {
+                    let image = UIImage(named: "default_image.png")
+                    label.image = image
+                }
+                else {
+                    let url = URL(string: Config.basePhotoUrl + detail.poster_path!)!
+                    label.kf.setImage(with: url)
+                }
+                
                 label.layer.cornerRadius = 10
                 label.clipsToBounds = true
+                
             }
             if let label = rating {
-                label.text = "Rating: \(detail.rating)"
+                label.text = "Rating: \(detail.vote_average ?? 0)"
+            }
+        }
+        
+        else if let detail = tvShow {
+            if let label = header {
+                label.text = "\(detail.name ?? "No title")"
+            }
+            if let label = desc {
+                label.text = detail.overview ?? "No description"
+            }
+            if let label = image {
+                
+                if detail.poster_path == nil {
+                    let image = UIImage(named: "default_image.png")
+                    label.image = image
+                }
+                else {
+                    let url = URL(string: Config.basePhotoUrl + detail.poster_path!)!
+                    label.kf.setImage(with: url)
+                }
+                
+                label.layer.cornerRadius = 10
+                label.clipsToBounds = true
+                
+            }
+            if let label = rating {
+                label.text = "Rating: \(detail.vote_average ?? 0)"
             }
         }
     }
     
-    var tmdb: TMDB? {
+    var movie: Movie? {
+        didSet {
+            // Update the view.
+            configureView()
+        }
+    }
+    
+    var tvShow: TvShow? {
         didSet {
             // Update the view.
             configureView()

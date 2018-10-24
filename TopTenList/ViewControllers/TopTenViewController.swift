@@ -10,19 +10,21 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Kingfisher
-import Promises
+import PromiseKit
 
 class TopTenViewController: UIViewController {
     
-    var movies = [TMDB]()
-    var tvShows = [TMDB]()
-    var filteredMovies = [TMDB]()
-    var filteredTvShows = [TMDB]()
-    let arraySize = 10
+    var movies = [Movie]()
+    var tvShows = [TvShow]()
+    var filteredMovies = [Movie]()
+    var filteredTvShows = [TvShow]()
     var searchText: String?
-
+    let searchController = UISearchController(searchResultsController: nil)
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +32,24 @@ class TopTenViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         customizeNavBar()
-        getTopRatedMovies()
-        getTopRatedTvShows()
+        
+        ApiManager.shared.fetchTopRatedMovies().done({
+            movies in
+                self.movies = movies
+                self.tableView.reloadData()
+            }).catch { error in
+                            //Handle error or give feedback to the user
+            print(error.localizedDescription)
+            }
+
+        ApiManager.shared.fetchTopRatedTvShows().done({
+            tvShows in
+                self.tvShows = tvShows
+                self.tableView.reloadData()
+        }).catch { error in
+                //Handle error or give feedback to the user
+                print(error.localizedDescription)
+        }
         
     }
     
@@ -43,200 +61,150 @@ class TopTenViewController: UIViewController {
             tableView.deselectRow(at: selectionIndexPath, animated: animated)
         }
     }
-    
+
     // Customize navbvar to prefer large titles and attach searchResultsController
     func customizeNavBar () {
-        
+
         //Set Large Titles
         navigationController?.navigationBar.prefersLargeTitles = true
         // Remove shadow
         navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
-        
-        // Create Search controller
-        let searchController = UISearchController(searchResultsController: nil)
+
+        // Customize search controller
         searchController.delegate = self
         searchController.searchBar.showsCancelButton = false
-        searchController.searchBar.placeholder = "Search"
+        searchController.searchBar.placeholder = "Search Tv Shows"
         searchController.searchBar.delegate = self
-        
+
         // Attach search controller to navbar
         navigationItem.searchController = searchController
         navigationItem.title = "TMDB top 10 ratings"
+
+
     }
-    
+
+    func setSearchBarPlaceholder() {
+        searchController.searchBar.text = ""
+        if segmentControl.selectedSegmentIndex == 0 {
+            searchController.searchBar.placeholder = "Search Tv Shows"
+        }
+
+        else {
+            searchController.searchBar.placeholder = "Search Movies"
+        }
+    }
+
     // Reload tableview on segmented control switch
     @IBAction func switchTableView(_ sender: Any) {
         tableView.reloadData()
+        setSearchBarPlaceholder()
+        clearSearchFilters()
     }
-    
-    // Get top rated movies from TMDB, through Alamofire and swiftyJSON
-    func getTopRatedMovies () {
-        Alamofire.request(Config.topRatedMoviesURL).responseJSON {
-            response in
-            
-            var count = 0
-            
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let posterRoot = Config.base_URL + Config.photoSize
-                
-                for(_, SubJSON):(String, JSON) in json["results"]{
-                    let newMovie = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
-                                        rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
-                                        title: SubJSON["title"].rawValue as! String,
-                                        description: SubJSON["overview"].rawValue as! String)
 
-                    if count < self.arraySize {
-                        self.movies.append(newMovie)
-                    }
-                    else { break }
-                    count += 1
-                }
-                self.tableView.reloadData()
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
+    func addScopeButtomBorder() {
+        let scopeBarHeight = segmentControl.frame.height
+        let bottomLine = CALayer()
+        bottomLine.frame = CGRect(x: -1000, y: scopeBarHeight + 8, width: 5000, height: 0.5)
+        bottomLine.backgroundColor = UIColor.lightGray.cgColor
+        segmentControl.layer.addSublayer(bottomLine)
     }
-    
-    // Get top rated Tv Shows from TMDB, through Alamofire and swiftyJSON
-    func getTopRatedTvShows (){
-        Alamofire.request(Config.topRatedTvShowsURL).responseJSON {
-            response in
-            var count = 0
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let posterRoot = Config.base_URL + Config.photoSize
-                
-                for(_, SubJSON):(String, JSON) in json["results"]{
-                    let newTvShow = TMDB(imageURL: posterRoot + (SubJSON["poster_path"].rawValue as! String),
-                                         rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
-                                         title: SubJSON["name"].rawValue as! String,
-                                         description: SubJSON["overview"].rawValue as! String)
-                    
-                    if count < self.arraySize {
-                        self.tvShows.append(newTvShow)
-                    }
-                    else { break }
-                    count += 1
-                }
-                self.tableView.reloadData()
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
+
+    func removeScopeButtomBorder() {
+        let scopeBarHeight = segmentControl.frame.height
+        let bottomLine = CALayer()
+        bottomLine.frame = CGRect(x: -1000, y: scopeBarHeight + 8, width: 5000, height: 0.5)
+        bottomLine.backgroundColor = UIColor.white.cgColor
+        segmentControl.layer.addSublayer(bottomLine)
     }
-    
-    func searchMovies (query: String){
-        Alamofire.request("https://api.themoviedb.org/3/search/movie?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US&query=\(query)&page=1&include_adult=false").responseJSON {
-            response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let posterRoot = Config.base_URL + Config.photoSize
-                
-                for(_, SubJSON):(String, JSON) in json["results"]{
-                    
-                    let newMovie = TMDB(imageURL: posterRoot + "\(SubJSON["poster_path"])",
-                                         rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
-                                         title: SubJSON["title"].rawValue as! String,
-                                         description: SubJSON["overview"].rawValue as! String)
-                    self.filteredMovies.append(newMovie)
-                }
-                self.tableView.reloadData()
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func searchTvShows (query: String){
-        Alamofire.request("https://api.themoviedb.org/3/search/tv?api_key=4aa0aa668b1d20ef02867315419d5880&language=en-US&query=\(query)&page=1&include_adult=false").responseJSON {
-            response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                //print(json)
-                let posterRoot = Config.base_URL + Config.photoSize
-                
-                for(_, SubJSON):(String, JSON) in json["results"]{
-                    
-                    let newTvShow = TMDB(imageURL: posterRoot + "\(SubJSON["poster_path"])",
-                        rating: Double(truncating: SubJSON["vote_average"].rawValue as! NSNumber),
-                        title: SubJSON["name"].rawValue as! String,
-                        description: SubJSON["overview"].rawValue as! String)
-                    self.filteredTvShows.append(newTvShow)
-                }
-                self.tableView.reloadData()
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
+
     func clearSearchFilters(){
         filteredTvShows = []
         filteredMovies = []
         tableView.reloadData()
     }
-    
+
     func searchTextCountIsGreaterThanTwo (searchText: String) -> Bool{
-        if searchText.count > 2 {
-            return true
+        guard searchText.count > 2 else {
+            return false
         }
-        else { return false }
+        return true
     }
-    
+
     func segmentedControlIndexIsZero() -> Bool {
-        if segmentControl.selectedSegmentIndex == 0 {
-            return true
+        guard segmentControl.selectedSegmentIndex == 0 else {
+            return false
         }
-        else { return false }
+        return true
     }
-    
-    func createCell(cell: CustomTableViewCell, tmdb: TMDB, index: Int, url: URL) -> CustomTableViewCell{
+
+    func createMovieCell(cell: CustomTableViewCell, movie: Movie, index: Int) -> CustomTableViewCell{
+        
+        var urlString = ""
+        
+        if movie.poster_path != nil {
+            urlString = Config.basePhotoUrl + movie.poster_path!
+        } else {
+            urlString = "default_image.png"
+        }
+        let url = URL(string: urlString)!
+        
         cell.ranking.text = "\(index + 1)"
         cell.photo.kf.setImage(with: url)
         cell.photo.layer.cornerRadius = 10
         cell.photo.clipsToBounds = true
-        cell.rating.text = "\(tmdb.rating)"
-        cell.title.text = tmdb.title
-        cell.desc.text = tmdb.description
+        cell.rating.text = "\(movie.vote_average!)"
+        cell.title.text = movie.title!
+        cell.desc.text = movie.overview!
+        return cell
+    }
+    
+    func createTvShowCell(cell: CustomTableViewCell, tvShow: TvShow, index: Int) -> CustomTableViewCell{
+        
+        var urlString = ""
+        
+        if tvShow.poster_path != nil {
+            urlString = Config.basePhotoUrl + tvShow.poster_path!
+        } else {
+            urlString = "default_image.png"
+        }
+        let url = URL(string: urlString)!
+        
+        cell.ranking.text = "\(index + 1)"
+        cell.photo.kf.setImage(with: url)
+        cell.photo.layer.cornerRadius = 10
+        cell.photo.clipsToBounds = true
+        cell.rating.text = "\(tvShow.vote_average!)"
+        cell.title.text = tvShow.name!
+        cell.desc.text = tvShow.overview!
         return cell
     }
 }
 
 // Extension of TopTenViewController dealing with table related tasks
 extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
-    
+
     // Prepare for segue based on which button on segment index is selected
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detailView" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                
+
                 let controller = segue.destination  as! DetailViewController
                 
                 switch segmentControl.selectedSegmentIndex {
-                    
+
                 case 0:
-                    guard !filteredMovies.isEmpty else {
-                        controller.tmdb = movies[indexPath.row]
+                    guard !filteredTvShows.isEmpty else {
+                        controller.tvShow = tvShows[indexPath.row]
                         return
                     }
-                    controller.tmdb = filteredMovies[indexPath.row]
+                    controller.tvShow = filteredTvShows[indexPath.row]
                     
                 case 1:
-                    guard !filteredTvShows.isEmpty else {
-                        controller.tmdb = tvShows[indexPath.row]
+                    guard !filteredMovies.isEmpty else {
+                        controller.movie = movies[indexPath.row]
                         return
                     }
-                    controller.tmdb = filteredTvShows[indexPath.row]
+                    controller.movie = filteredMovies[indexPath.row]
                     
                 default:
                     break
@@ -244,68 +212,88 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             }
         }
     }
-    
-    
-    
+
+
+
     // Perform segue to detailview
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "detailView", sender: self)
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
+    // Add bottom border to scope if user is scrolling down
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        var lastVelocityYSign = 0
+        let currentVelocityY = scrollView.panGestureRecognizer.velocity(in: scrollView.superview).y
+        let currentVelocityYSign = Int(currentVelocityY).signum()
+        if currentVelocityYSign != lastVelocityYSign &&
+            currentVelocityYSign != 0 {
+            lastVelocityYSign = currentVelocityYSign
+        }
+        if lastVelocityYSign < 0 {
+            addScopeButtomBorder()
+
+        }
+        else if lastVelocityYSign > 0 {
+            removeScopeButtomBorder()
+        }
+    }
+    
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        removeScopeButtomBorder()
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         switch segmentControl.selectedSegmentIndex {
         case 0:
-            guard !filteredMovies.isEmpty else {
-                return movies.count
-            }
-            return filteredMovies.count
-            
-        case 1:
             guard !filteredTvShows.isEmpty else {
                 return tvShows.count
             }
             return filteredTvShows.count
-            
+
+        case 1:
+            guard !filteredMovies.isEmpty else {
+                return movies.count
+            }
+            return filteredMovies.count
+
         default:
             break
         }
         return 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         
         switch segmentControl.selectedSegmentIndex {
         case 0:
+            guard !filteredTvShows.isEmpty else {
+                
+                let tvShow = tvShows[indexPath.row]
+                return createTvShowCell(cell: cell, tvShow: tvShow, index: indexPath.row)
+                
+            }
+
+            let filteredTvShow = filteredTvShows[indexPath.row]
+            return createTvShowCell(cell: cell, tvShow: filteredTvShow, index: indexPath.row)
+            
+        case 1:
             guard !filteredMovies.isEmpty else {
                 let movie = movies[indexPath.row]
-                let url = URL(string: movie.imageURL)!
-                return createCell(cell: cell, tmdb: movie, index: indexPath.row, url: url)
+                return createMovieCell(cell: cell, movie: movie, index: indexPath.row)
             }
             
             let filteredMovie = filteredMovies[indexPath.row]
-            let url = URL(string: filteredMovie.imageURL)!
-            return createCell(cell: cell, tmdb: filteredMovie, index: indexPath.row, url: url)
-            
-        case 1:
-            guard !filteredTvShows.isEmpty else {
-                let tvShow = tvShows[indexPath.row]
-                let url = URL(string: tvShow.imageURL)!
-                return createCell(cell: cell, tmdb: tvShow, index: indexPath.row, url: url)
-            }
-            
-            let filteredTvShow = filteredTvShows[indexPath.row]
-            let url = URL(string: filteredTvShow.imageURL)!
-            return createCell(cell: cell, tmdb: filteredTvShow, index: indexPath.row, url: url)
+            return createMovieCell(cell: cell, movie: filteredMovie, index: indexPath.row)
             
         default:
             return cell
@@ -315,9 +303,9 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
 
 extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
 
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+
         self.searchText = searchText
         let formattedSearchText = searchText.replacingOccurrences(of: " ", with: "%20")
         guard searchTextCountIsGreaterThanTwo(searchText: searchText) else {
@@ -326,32 +314,43 @@ extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
         }
 
         guard segmentedControlIndexIsZero() else {
-            self.searchTvShows(query: formattedSearchText)
-            tableView.reloadData()
+            ApiManager.shared.searchMovies(query: formattedSearchText).done( { filteredMovies in
+                self.clearSearchFilters()
+                self.filteredMovies = filteredMovies
+                self.tableView.reloadData()
+            })
+            .catch { error in
+                self.clearSearchFilters()
+                //Handle error or give feedback to the user
+                print(error.localizedDescription)
+            }
             return
         }
+        ApiManager.shared.searchTopRatedTvShows(query: formattedSearchText).done({ filteredTvShows in
+            self.clearSearchFilters()
+            self.filteredTvShows = filteredTvShows
+            self.tableView.reloadData()
+        }).catch { error in
+            print(error)
+        }
+        
 
-        clearSearchFilters()
-        self.searchMovies(query: formattedSearchText)
-        tableView.reloadData()
     }
-    
+
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         if self.searchText != nil {
             searchBar.text = self.searchText
         }
     }
-    
+
     func willDismissSearchController(_ searchController: UISearchController) {
         // MARK -- The text does not persist in the searchbar during the search bar animation. This is only the case after pressing the search button. Therefore, this has no effect:
         searchController.searchBar.text = self.searchText
     }
-    
+
     func didDismissSearchController(_ searchController: UISearchController) {
         navigationItem.hidesSearchBarWhenScrolling = true
         searchController.searchBar.text = self.searchText
     }
-
-   
-    
 }
+

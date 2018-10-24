@@ -7,7 +7,25 @@
 		<key>TopTenList.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>8</integer>
+			<integer>9</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>9E63067E217B450600D3C28A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9E630692217B450800D3C28A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9E63069D217B450800D3C28A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

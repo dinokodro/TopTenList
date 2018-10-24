@@ -10,7 +10,7 @@ target 'TopTenList' do
 	pod 'Kingfisher'
 	pod 'SwiftLint'
 	pod 'SwiftyJSON'
-	pod 'PromisesSwift'
+	pod "PromiseKit"
 
   target 'TopTenListTests' do
     inherit! :search_paths

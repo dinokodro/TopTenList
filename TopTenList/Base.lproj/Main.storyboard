@@ -20,8 +20,8 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Rs7-qB-jgw">
                                 <rect key="frame" x="16" y="64" width="343" height="29"/>
                                 <segments>
-                                    <segment title="Movies"/>
                                     <segment title="Tv Shows"/>
+                                    <segment title="Movies"/>
                                 </segments>
                                 <connections>
                                     <action selector="switchTableView:" destination="tFA-pn-99H" eventType="valueChanged" id="IAs-yN-Us1"/>

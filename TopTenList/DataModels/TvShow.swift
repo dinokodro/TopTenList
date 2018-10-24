@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct TMDB{
+struct TvShow: Decodable {
     
-    var imageURL: String
+    let name: String?
     
-    var rating: Double
+    let vote_average: Double?
     
-    var title: String
+    let overview: String?
     
-    var description: String
+    let poster_path: String?
     
 }

@@ -13,7 +13,11 @@
 		9E414254217B62C900434905 /* TopTenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414253217B62C900434905 /* TopTenViewController.swift */; };
 		9E414256217B68F600434905 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414255217B68F600434905 /* CustomTableViewCell.swift */; };
 		9E41425B217B73C000434905 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41425A217B73C000434905 /* Config.swift */; };
-		9E414261217B74A900434905 /* TMDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414260217B74A900434905 /* TMDB.swift */; };
+		9E414261217B74A900434905 /* TvShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E414260217B74A900434905 /* TvShow.swift */; };
+		9E5844872180924700E082BB /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5844862180924700E082BB /* ApiManager.swift */; };
+		9E58448921809A2C00E082BB /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58448821809A2C00E082BB /* Movie.swift */; };
+		9E58448B21809F7400E082BB /* TopRatedMoviesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58448A21809F7400E082BB /* TopRatedMoviesResult.swift */; };
+		9E58448D2180CAF500E082BB /* TopRatedTvShowsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E58448C2180CAF500E082BB /* TopRatedTvShowsResult.swift */; };
 		9E630683217B450600D3C28A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E630682217B450600D3C28A /* AppDelegate.swift */; };
 		9E630688217B450600D3C28A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E630686217B450600D3C28A /* Main.storyboard */; };
 		9E63068A217B450800D3C28A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E630689217B450800D3C28A /* Assets.xcassets */; };
@@ -50,7 +54,11 @@
 		9E414253217B62C900434905 /* TopTenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTenViewController.swift; sourceTree = "<group>"; };
 		9E414255217B68F600434905 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		9E41425A217B73C000434905 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		9E414260217B74A900434905 /* TMDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDB.swift; sourceTree = "<group>"; };
+		9E414260217B74A900434905 /* TvShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShow.swift; sourceTree = "<group>"; };
+		9E5844862180924700E082BB /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
+		9E58448821809A2C00E082BB /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		9E58448A21809F7400E082BB /* TopRatedMoviesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRatedMoviesResult.swift; sourceTree = "<group>"; };
+		9E58448C2180CAF500E082BB /* TopRatedTvShowsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRatedTvShowsResult.swift; sourceTree = "<group>"; };
 		9E63067F217B450600D3C28A /* TopTenList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TopTenList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E630682217B450600D3C28A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E630687217B450600D3C28A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -132,7 +140,10 @@
 		9E414257217B71A700434905 /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
-				9E414260217B74A900434905 /* TMDB.swift */,
+				9E58448A21809F7400E082BB /* TopRatedMoviesResult.swift */,
+				9E58448C2180CAF500E082BB /* TopRatedTvShowsResult.swift */,
+				9E414260217B74A900434905 /* TvShow.swift */,
+				9E58448821809A2C00E082BB /* Movie.swift */,
 			);
 			path = DataModels;
 			sourceTree = "<group>";
@@ -165,6 +176,7 @@
 				9E630682217B450600D3C28A /* AppDelegate.swift */,
 				9E41425A217B73C000434905 /* Config.swift */,
 				9E414255217B68F600434905 /* CustomTableViewCell.swift */,
+				9E5844862180924700E082BB /* ApiManager.swift */,
 				9E414257217B71A700434905 /* DataModels */,
 				9E630686217B450600D3C28A /* Main.storyboard */,
 				9E41424E217B593500434905 /* ViewControllers */,
@@ -421,8 +433,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-TopTenList/Pods-TopTenList-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
-				"${BUILT_PRODUCTS_DIR}/PromisesSwift/Promises.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -431,8 +442,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Promises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,11 +457,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E414261217B74A900434905 /* TMDB.swift in Sources */,
+				9E414261217B74A900434905 /* TvShow.swift in Sources */,
+				9E58448B21809F7400E082BB /* TopRatedMoviesResult.swift in Sources */,
 				9E41424D217B592B00434905 /* DetailViewController.swift in Sources */,
 				9E414254217B62C900434905 /* TopTenViewController.swift in Sources */,
+				9E5844872180924700E082BB /* ApiManager.swift in Sources */,
 				9E414256217B68F600434905 /* CustomTableViewCell.swift in Sources */,
 				9E630683217B450600D3C28A /* AppDelegate.swift in Sources */,
+				9E58448921809A2C00E082BB /* Movie.swift in Sources */,
+				9E58448D2180CAF500E082BB /* TopRatedTvShowsResult.swift in Sources */,
 				9E41425B217B73C000434905 /* Config.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -558,7 +572,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -613,7 +627,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
