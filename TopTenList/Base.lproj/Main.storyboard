@@ -69,8 +69,8 @@
                                                     <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8.2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TUw-Ti-XTe">
-                                                    <rect key="frame" x="90" y="35" width="17" height="14"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8.23" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TUw-Ti-XTe">
+                                                    <rect key="frame" x="90" y="35" width="23.5" height="14"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -91,9 +91,9 @@
                                                 <constraint firstItem="7xN-m9-wre" firstAttribute="top" secondItem="2EU-kk-IXF" secondAttribute="top" constant="20" id="TML-YJ-O3N"/>
                                                 <constraint firstItem="TUw-Ti-XTe" firstAttribute="top" secondItem="jSN-h7-rWg" secondAttribute="bottom" constant="3" id="TRR-rB-WVL"/>
                                                 <constraint firstItem="jSN-h7-rWg" firstAttribute="top" secondItem="2EU-kk-IXF" secondAttribute="top" constant="11" id="YLj-pM-zCc"/>
-                                                <constraint firstItem="GXh-VN-PVp" firstAttribute="leading" secondItem="TUw-Ti-XTe" secondAttribute="trailing" constant="15" id="fHQ-cc-41d"/>
                                                 <constraint firstAttribute="trailing" secondItem="7xN-m9-wre" secondAttribute="trailing" constant="16" id="fy8-O0-6ot"/>
                                                 <constraint firstAttribute="trailing" secondItem="hN9-6c-d2F" secondAttribute="trailing" constant="40" id="ntn-lp-bqi"/>
+                                                <constraint firstItem="GXh-VN-PVp" firstAttribute="leading" secondItem="TUw-Ti-XTe" secondAttribute="trailing" constant="8.5" id="q4C-F0-anz"/>
                                                 <constraint firstAttribute="trailing" secondItem="GXh-VN-PVp" secondAttribute="trailing" constant="55" id="xBt-Zm-bda"/>
                                             </constraints>
                                         </tableViewCellContentView>

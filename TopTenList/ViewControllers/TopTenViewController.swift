@@ -80,7 +80,6 @@ class TopTenViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.title = "TMDB top 10 ratings"
 
-
     }
 
     func setSearchBarPlaceholder() {
@@ -116,48 +115,6 @@ class TopTenViewController: UIViewController {
         tableView.reloadData()
     }
 
-    func createMovieCell(cell: CustomTableViewCell, movie: Movie, index: Int) -> CustomTableViewCell{
-        
-        var urlString = ""
-        
-        if movie.poster_path != nil {
-            urlString = Config.basePhotoUrl + movie.poster_path!
-            let url = URL(string: urlString)!
-            cell.photo.kf.setImage(with: url)
-        } else {
-            urlString = "default_image.png"
-            cell.photo.image = UIImage(named: urlString)
-        }
-        
-        cell.ranking.text = "\(index + 1)"
-        cell.photo.layer.cornerRadius = 10
-        cell.photo.clipsToBounds = true
-        cell.rating.text = "\(movie.vote_average!)"
-        cell.title.text = movie.title ?? "No title"
-        cell.desc.text = movie.overview ?? "No Description"
-        return cell
-    }
-    
-    func createTvShowCell(cell: CustomTableViewCell, tvShow: TvShow , index: Int) -> CustomTableViewCell{
-        
-        var urlString = ""
-        
-        if tvShow.poster_path != nil {
-            urlString = Config.basePhotoUrl + tvShow.poster_path!
-        } else {
-            urlString = "default_image.png"
-        }
-        let url = URL(string: urlString)!
-        
-        cell.ranking.text = "\(index + 1)"
-        cell.photo.kf.setImage(with: url)
-        cell.photo.layer.cornerRadius = 10
-        cell.photo.clipsToBounds = true
-        cell.rating.text = "\(tvShow.vote_average!)"
-        cell.title.text = tvShow.name ?? "No title"
-        cell.desc.text = tvShow.overview ?? "No Description"
-        return cell
-    }
 }
 
 // Extension of TopTenViewController dealing with table related tasks
@@ -256,39 +213,20 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         case 0:
             guard !filteredTvShows.isEmpty else {
                 let tvShow = tvShows[indexPath.row]
-                return createTvShowCell(cell: cell, tvShow: tvShow, index: indexPath.row)
+                return cell.createTvShowCell(cell: cell, tvShow: tvShow, index: indexPath.row)
             }
 
-            let tvShow = filteredTvShows[indexPath.row]
-            //return createTvShowCell(cell: cell, tvShow: filteredTvShow, index: indexPath.row)
-            
-            var urlString = ""
-            
-            if tvShow.poster_path != nil {
-                urlString = Config.basePhotoUrl + tvShow.poster_path!
-            } else {
-                urlString = "default_image.png"
-            }
-            let url = URL(string: urlString)!
-            
-            cell.ranking.text = "\(indexPath.row + 1)"
-            cell.photo.kf.setImage(with: url)
-            cell.photo.layer.cornerRadius = 10
-            cell.photo.clipsToBounds = true
-            cell.rating.text = "\(tvShow.vote_average!)"
-            cell.title.text = tvShow.name ?? "No title"
-            cell.desc.text = tvShow.overview ?? "No Description"
-            print(tvShow.overview ?? "No description")
-            return cell
+            let filteredTvShow = filteredTvShows[indexPath.row]
+            return cell.createTvShowCell(cell: cell, tvShow: filteredTvShow, index: indexPath.row)
             
         case 1:
             guard !filteredMovies.isEmpty else {
                 let movie = movies[indexPath.row]
-                return createMovieCell(cell: cell, movie: movie, index: indexPath.row)
+                return cell.createMovieCell(cell: cell, movie: movie, index: indexPath.row)
             }
             
             let filteredMovie = filteredMovies[indexPath.row]
-            return createMovieCell(cell: cell, movie: filteredMovie, index: indexPath.row)
+            return cell.createMovieCell(cell: cell, movie: filteredMovie, index: indexPath.row)
             
         default:
             return cell

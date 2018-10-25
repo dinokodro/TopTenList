@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TvShow: Decodable {
+struct TvShow: Decodable, SharedPropertiesProtocol {
     
     let name: String?
     

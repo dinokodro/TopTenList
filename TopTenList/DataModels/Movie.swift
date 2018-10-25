@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Movie: Decodable {
+struct Movie: Decodable, SharedPropertiesProtocol {
     
     let title: String?
     
