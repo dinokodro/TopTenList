@@ -11,7 +11,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 What is needed in order to build and run the app:
 ```
-Newest Xcode (Version 10.0 used for this project) and a Mac
+- Xcode Version 10.0
+```
+```
+- Mac running macOS 10.13.6 or later.
 ```
 
 ### Build and Run the TopTenList app
@@ -25,7 +28,8 @@ Newest Xcode (Version 10.0 used for this project) and a Mac
 2. Click on "Open in Xcode". Save it to the desired location on your computer.
 ```
 ```
-3. The computer opens the project in Xcode automatically.
+3. The computer opens the project in Xcode automatically. 
+   (If it does not, open the TopTenList folder, and select TopTenList.xcworkspace)
 ```
 ```
 4. Select the desired iOS simulator and press the "play" button. This launches the application. 
