@@ -38,8 +38,7 @@ class TopTenViewController: UIViewController {
                 self.movies = movies
                 self.tableView.reloadData()
             }).catch { error in
-                            //Handle error or give feedback to the user
-            print(error.localizedDescription)
+                print(error.localizedDescription)
             }
 
         ApiManager.shared.fetchTopRatedTvShows().done({
@@ -47,7 +46,6 @@ class TopTenViewController: UIViewController {
                 self.tvShows = tvShows
                 self.tableView.reloadData()
         }).catch { error in
-                //Handle error or give feedback to the user
                 print(error.localizedDescription)
         }
         
@@ -81,26 +79,8 @@ class TopTenViewController: UIViewController {
         navigationItem.title = "TMDB top 10 ratings"
 
     }
-
-    func setSearchBarPlaceholder() {
-        searchController.searchBar.text = ""
-        addScopeButtomBorder(withColor: UIColor.white)
-        if segmentControl.selectedSegmentIndex == 0 {
-            searchController.searchBar.placeholder = "Search Tv Shows"
-        }
-
-        else {
-            searchController.searchBar.placeholder = "Search Movies"
-        }
-    }
-
-    // Reload tableview on segmented control switch
-    @IBAction func switchTableView(_ sender: Any) {
-        tableView.reloadData()
-        setSearchBarPlaceholder()
-        clearSearchFilters()
-    }
-
+    
+    // Add buttom border to searchbar based on inputted color
     func addScopeButtomBorder(withColor: UIColor) {
         let scopeBarHeight = segmentControl.frame.height
         let bottomLine = CALayer()
@@ -109,18 +89,40 @@ class TopTenViewController: UIViewController {
         segmentControl.layer.addSublayer(bottomLine)
     }
 
+    // Set searchbar placeholder based on which segment is cliked
+    func setSearchBarPlaceholder() {
+        if segmentControl.selectedSegmentIndex == 0 {
+            searchController.searchBar.placeholder = "Search Tv Shows"
+        }
+
+        else {
+            searchController.searchBar.placeholder = "Search Movies"
+        }
+    }
+    
+    // Clear search filters and reload tableview
     func clearSearchFilters(){
         filteredTvShows = []
         filteredMovies = []
         tableView.reloadData()
     }
 
+    // Different actions performed if segmented index value changes
+    
+    @IBAction func segmentedControl_ValueChanged(_ sender: Any) {
+        clearSearchFilters()
+        tableView.reloadData()
+        searchController.searchBar.text = ""
+        setSearchBarPlaceholder()
+        addScopeButtomBorder(withColor: UIColor.white)
+    }
+    
 }
 
 // Extension of TopTenViewController dealing with table related tasks
 extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
 
-    // Prepare for segue based on which button on segment index is selected
+    // Prepare for segue based on which button on segment index is clicked and if the user is in search mode or not
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detailView" {
             if let indexPath = tableView.indexPathForSelectedRow {
@@ -155,36 +157,17 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         performSegue(withIdentifier: "detailView", sender: self)
     }
 
+    // Return height of cells
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
 
+    // Return number of sections in cells
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
-    // Add bottom border to scope if user is scrolling down
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        var lastVelocityYSign = 0
-        let currentVelocityY = scrollView.panGestureRecognizer.velocity(in: scrollView.superview).y
-        let currentVelocityYSign = Int(currentVelocityY).signum()
-        if currentVelocityYSign != lastVelocityYSign &&
-            currentVelocityYSign != 0 {
-            lastVelocityYSign = currentVelocityYSign
-        }
-        if lastVelocityYSign < 0 {
-            addScopeButtomBorder(withColor: UIColor.lightGray)
 
-        }
-        else if lastVelocityYSign > 0 {
-            addScopeButtomBorder(withColor: UIColor.white)
-        }
-    }
-    
-    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-         addScopeButtomBorder(withColor: UIColor.white)
-    }
-
+    // Return number of rows in tableview based on which segment index is clicked, and if the user is in search mode or not
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         switch segmentControl.selectedSegmentIndex {
@@ -206,6 +189,7 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         return 0
     }
 
+    // Create cells in tableview based on which segment index is clicked, and if the user is in search mode or not
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         
@@ -232,19 +216,47 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
             return cell
         }
     }
+    
+    // Add ligth grey border to scope if user is scrolling down, add white if user is scrolling up
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        var lastVelocityYSign = 0
+        let currentVelocityY = scrollView.panGestureRecognizer.velocity(in: scrollView.superview).y
+        let currentVelocityYSign = Int(currentVelocityY).signum()
+        if currentVelocityYSign != lastVelocityYSign &&
+            currentVelocityYSign != 0 {
+            lastVelocityYSign = currentVelocityYSign
+        }
+        if lastVelocityYSign < 0 {
+            addScopeButtomBorder(withColor: UIColor.lightGray)
+            
+        }
+        else if lastVelocityYSign > 0 {
+            addScopeButtomBorder(withColor: UIColor.white)
+        }
+    }
+    
+    // Add white buttom scope border if scroll view did scroll to top
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        addScopeButtomBorder(withColor: UIColor.white)
+    }
 }
 
+// Extension of TopTenViewController dealing search related tasks
 extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
 
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
+        // Perform search if the user has typed atleast 3 letters.
         self.searchText = searchText
+        
+        // Format spaces in searchtext to match how spaces are required by API
         let formattedSearchText = searchText.replacingOccurrences(of: " ", with: "%20")
         guard searchText.count > 2 else {
             clearSearchFilters()
             return
         }
         
+        // Search tv shows or movies, based on which segment index is clicked
         switch segmentControl.selectedSegmentIndex{
         case 0:
             ApiManager.shared.searchTopRatedTvShows(query: formattedSearchText).done({ filteredTvShows in
@@ -270,16 +282,28 @@ extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
             break
         }
     }
-
+    
+    // Add search text to searchbar after search bar editing is done
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        if self.searchText != nil {
-            searchBar.text = self.searchText
-        }
-    }
-
-    func didDismissSearchController(_ searchController: UISearchController) {
-        navigationItem.hidesSearchBarWhenScrolling = true
         searchController.searchBar.text = self.searchText
     }
+    
+    // Add search text to searchbar after dismissal of the searchcontroller. This is when a person presses the search button
+    func didDismissSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.text = self.searchText
+    }
+
+    /*
+    The tranistion of the dismissal of the search controller is not so smooth.
+    Adding the searchbar text in willDismissSearchController does not change the
+    text in the searchbar during dismissal. This leads to a bad UI, where the
+    searchtext dissapears during the dismisall of the searchcontroller,
+    but then reapears after the dismisall is done.
+    The code below does not have any effect.
+    */
+    func willDismissSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.text = self.searchText
+    }
+
 }
 
