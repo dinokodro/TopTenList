@@ -18,4 +18,6 @@ struct Movie: Decodable, SharedPropertiesProtocol {
     
     let poster_path: String?
     
+    let vote_count: Int?
+    
 }

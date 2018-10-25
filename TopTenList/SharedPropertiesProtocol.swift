@@ -16,4 +16,6 @@ protocol SharedPropertiesProtocol {
     
     var poster_path: String? {get}
     
+    var vote_count: Int? {get}
+    
 }

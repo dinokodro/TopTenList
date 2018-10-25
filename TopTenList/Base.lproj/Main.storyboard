@@ -180,8 +180,8 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating: 9.6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F3Y-ZG-6lj">
-                                <rect key="frame" x="20" y="320.5" width="77.5" height="19"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating: No votes given!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F3Y-ZG-6lj">
+                                <rect key="frame" x="20" y="320.5" width="166" height="19"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -197,7 +197,6 @@
                             <constraint firstItem="ZMe-cM-7er" firstAttribute="top" secondItem="0i8-lQ-ufb" secondAttribute="bottom" constant="10" id="E5G-4J-sJt"/>
                             <constraint firstItem="ZMe-cM-7er" firstAttribute="leading" secondItem="3eN-qq-8j2" secondAttribute="leading" constant="20" id="Fjt-1K-ILM"/>
                             <constraint firstItem="jjy-dP-hhD" firstAttribute="top" secondItem="F3Y-ZG-6lj" secondAttribute="bottom" constant="3" id="I66-es-L4Q"/>
-                            <constraint firstItem="3eN-qq-8j2" firstAttribute="trailing" secondItem="F3Y-ZG-6lj" secondAttribute="trailing" constant="277.5" id="Rsc-pZ-4L2"/>
                             <constraint firstItem="0i8-lQ-ufb" firstAttribute="top" secondItem="3eN-qq-8j2" secondAttribute="top" id="Sr9-Ng-ZI7"/>
                             <constraint firstItem="ZMe-cM-7er" firstAttribute="top" secondItem="0i8-lQ-ufb" secondAttribute="bottom" constant="10" id="bLI-HS-4NK"/>
                             <constraint firstItem="F3Y-ZG-6lj" firstAttribute="top" secondItem="ZMe-cM-7er" secondAttribute="bottom" id="jP1-Ou-eSC"/>

@@ -30,69 +30,61 @@ class DetailViewController: UIViewController {
     
     func configureView() {
         // Update the user interface for the detail item.
-        if let detail = movie {
-            if let label = header {
-                label.text = "\(detail.title ?? "No title")"
+        if let detail = tmdb {
+            
+            if let movie = tmdb as? Movie {
+                if let label = header {
+                    guard movie.title != "" else{
+                        label.text = "No Title"
+                        return
+                    }
+                    label.text = movie.title ?? "No Title"
+                }
             }
+                
+            else if let tvShow = tmdb as? TvShow {
+                if let label = header {
+                    guard tvShow.name != "" else{
+                        label.text = "No Title"
+                        return
+                    }
+                    label.text = tvShow.name ?? "No Title"
+                }
+            }
+            
             if let label = desc {
+                guard detail.overview != "" else {
+                    label.text = "No description"
+                    return
+                }
                 label.text = detail.overview ?? "No description"
             }
+            
             if let label = image {
-                
-                if detail.poster_path == nil {
-                    let image = UIImage(named: "default_image.png")
-                    label.image = image
+                if detail.poster_path == nil || detail.poster_path == ""{
+                    label.image = UIImage(named: "default_image.png")
+                    return
                 }
                 else {
-                    let url = URL(string: Config.basePhotoUrl + detail.poster_path!)!
+                    let urlString = Config.basePhotoUrl + detail.poster_path!
+                    let url = URL(string: urlString)!
                     label.kf.setImage(with: url)
                 }
-                
                 label.layer.cornerRadius = 10
                 label.clipsToBounds = true
-                
             }
+            
             if let label = rating {
-                label.text = "Rating: \(detail.vote_average ?? 0)"
-            }
-        }
-        
-        else if let detail = tvShow {
-            if let label = header {
-                label.text = "\(detail.name ?? "No title")"
-            }
-            if let label = desc {
-                label.text = detail.overview ?? "No description"
-            }
-            if let label = image {
-                
-                if detail.poster_path == nil {
-                    let image = UIImage(named: "default_image.png")
-                    label.image = image
+                guard detail.vote_count! == 0 else {
+                    label.text = "Rating: No votes given!"
+                    return
                 }
-                else {
-                    let url = URL(string: Config.basePhotoUrl + detail.poster_path!)!
-                    label.kf.setImage(with: url)
-                }
-                
-                label.layer.cornerRadius = 10
-                label.clipsToBounds = true
-                
-            }
-            if let label = rating {
-                label.text = "Rating: \(detail.vote_average ?? 0)"
+                label.text = "Rating: \(detail.vote_average!)"
             }
         }
     }
     
-    var movie: Movie? {
-        didSet {
-            // Update the view.
-            configureView()
-        }
-    }
-    
-    var tvShow: TvShow? {
+    var tmdb: SharedPropertiesProtocol? {
         didSet {
             // Update the view.
             configureView()

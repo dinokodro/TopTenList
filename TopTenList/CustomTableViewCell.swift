@@ -63,9 +63,19 @@ class CustomTableViewCell: UITableViewCell {
         cell.ranking.text = "\(index + 1)"
         cell.photo.layer.cornerRadius = 10
         cell.photo.clipsToBounds = true
-        cell.rating.text = "\(tmdb.vote_average!)"
         
-        cell.desc.text = tmdb.overview!
+        if tmdb.vote_count! > 0{
+            cell.rating.text = "\(tmdb.vote_average!)"
+        }
+        else{
+            cell.rating.text = ""
+        }
+        
+        if tmdb.overview! == "" {
+            cell.desc.text = "No Description"
+        }
+        else { cell.desc.text = tmdb.overview }
+        
         return cell
     }
     

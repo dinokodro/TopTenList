@@ -106,13 +106,20 @@ class TopTenViewController: UIViewController {
         filteredMovies = []
         tableView.reloadData()
     }
+    
+    // Scrolls tableview to first row
+    func tableViewScrollToFirstRow() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
 
     // Different actions performed if segmented index value changes
-    
     @IBAction func segmentedControl_ValueChanged(_ sender: Any) {
         clearSearchFilters()
+        tableViewScrollToFirstRow()
         tableView.reloadData()
         searchController.searchBar.text = ""
+        self.searchText = ""
         setSearchBarPlaceholder()
         addScopeButtomBorder(withColor: UIColor.white)
     }
@@ -133,17 +140,17 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
 
                 case 0:
                     guard !filteredTvShows.isEmpty else {
-                        controller.tvShow = tvShows[indexPath.row]
+                        controller.tmdb = tvShows[indexPath.row]
                         return
                     }
-                    controller.tvShow = filteredTvShows[indexPath.row]
+                    controller.tmdb = filteredTvShows[indexPath.row]
                     
                 case 1:
                     guard !filteredMovies.isEmpty else {
-                        controller.movie = movies[indexPath.row]
+                        controller.tmdb = movies[indexPath.row]
                         return
                     }
-                    controller.movie = filteredMovies[indexPath.row]
+                    controller.tmdb = filteredMovies[indexPath.row]
                     
                 default:
                     break
@@ -243,7 +250,6 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
 
 // Extension of TopTenViewController dealing search related tasks
 extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
-
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // Perform search if the user has typed atleast 3 letters.
