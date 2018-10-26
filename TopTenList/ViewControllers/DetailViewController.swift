@@ -32,6 +32,7 @@ class DetailViewController: UIViewController {
         // Update the user interface for the detail item.
         if let detail = tmdb {
             
+            // Check for type Movie
             if let movie = tmdb as? Movie {
                 if let label = header {
                     guard movie.title != "" else{
@@ -42,6 +43,7 @@ class DetailViewController: UIViewController {
                 }
             }
                 
+            // Check for type TvShow
             else if let tvShow = tmdb as? TvShow {
                 if let label = header {
                     guard tvShow.name != "" else{
@@ -52,6 +54,7 @@ class DetailViewController: UIViewController {
                 }
             }
             
+            // Set description label
             if let label = desc {
                 guard detail.overview != "" else {
                     label.text = "No description"
@@ -60,33 +63,37 @@ class DetailViewController: UIViewController {
                 label.text = detail.overview ?? "No description"
             }
             
+            // Set image label
             if let label = image {
-                if detail.poster_path == nil || detail.poster_path == ""{
-                    label.image = UIImage(named: "default_image.png")
-                    return
-                }
-                else {
-                    let urlString = Config.basePhotoUrl + detail.poster_path!
+                var urlString = "default_image.png"
+                
+                if detail.poster_path != nil {
+                    urlString = Config.basePhotoUrl + detail.poster_path!
                     let url = URL(string: urlString)!
                     label.kf.setImage(with: url)
+                } else {
+                    label.image = UIImage(named: urlString)
                 }
+                
                 label.layer.cornerRadius = 10
                 label.clipsToBounds = true
             }
             
+            // Set rating label
             if let label = rating {
-                guard detail.vote_count! == 0 else {
+                guard detail.vote_count! > 0 && detail.vote_count != nil else {
                     label.text = "Rating: No votes given!"
                     return
                 }
-                label.text = "Rating: \(detail.vote_average!)"
+                let formatted = String(format: "%.1f", detail.vote_average!)
+                label.text = "Rating: \(formatted)"
             }
         }
     }
     
     var tmdb: SharedPropertiesProtocol? {
         didSet {
-            // Update the view.
+            // Configure view
             configureView()
         }
     }

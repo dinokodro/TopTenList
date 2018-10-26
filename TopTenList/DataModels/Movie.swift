@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Movie struct adapting to the Decodable protocol and the SharedPropertiesProtocol
 struct Movie: Decodable, SharedPropertiesProtocol {
     
     let title: String?

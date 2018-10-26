@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TvShow struct adapting to the Decodable protocol and the SharedPropertiesProtocol
 struct TvShow: Decodable, SharedPropertiesProtocol {
     
     let name: String?

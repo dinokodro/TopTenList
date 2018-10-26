@@ -20,20 +20,21 @@ class TopTenViewController: UIViewController {
     var filteredTvShows = [TvShow]()
     var searchText: String?
     let searchController = UISearchController(searchResultsController: nil)
+    var apiManager = ApiManager()
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.dataSource = self
         tableView.delegate = self
+
         customizeNavBar()
         
-        ApiManager.shared.fetchTopRatedMovies().done({
+        // Fetch top rated movies
+        apiManager.fetchTopRatedMovies().done({
             movies in
                 self.movies = movies
                 self.tableView.reloadData()
@@ -41,7 +42,8 @@ class TopTenViewController: UIViewController {
                 print(error.localizedDescription)
             }
 
-        ApiManager.shared.fetchTopRatedTvShows().done({
+        // Fetch top rated tv shows
+        apiManager.fetchTopRatedTvShows().done({
             tvShows in
                 self.tvShows = tvShows
                 self.tableView.reloadData()
@@ -63,9 +65,9 @@ class TopTenViewController: UIViewController {
     // Customize navbvar to prefer large titles and attach searchResultsController
     func customizeNavBar () {
 
-        //Set Large Titles
+        //Set Large Titles of navigation bar
         navigationController?.navigationBar.prefersLargeTitles = true
-        // Remove shadow
+        // Remove shadow from navigation bar
         navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
 
         // Customize search controller
@@ -91,12 +93,18 @@ class TopTenViewController: UIViewController {
 
     // Set searchbar placeholder based on which segment is cliked
     func setSearchBarPlaceholder() {
-        if segmentControl.selectedSegmentIndex == 0 {
+        switch segmentControl.selectedSegmentIndex{
+        
+        // Segment index 0: Top rated tv shows
+        case 0:
             searchController.searchBar.placeholder = "Search Tv Shows"
-        }
-
-        else {
+        
+        // Segment index 1: Top rated tv movie
+        case 1:
             searchController.searchBar.placeholder = "Search Movies"
+            
+        default:
+            break
         }
     }
     
@@ -134,22 +142,28 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         if segue.identifier == "detailView" {
             if let indexPath = tableView.indexPathForSelectedRow {
 
-                let controller = segue.destination  as! DetailViewController
+                let controller = segue.destination as! DetailViewController
                 
                 switch segmentControl.selectedSegmentIndex {
-
+                    
+                // Segment index 0: Top rated tv shows
                 case 0:
                     guard !filteredTvShows.isEmpty else {
+                        // Set property tmdb of controller to tvShows[indexPath.row] if filteredTvShows is empty
                         controller.tmdb = tvShows[indexPath.row]
                         return
                     }
+                    // Set property tmdb of controller to filteredTvShows[indexPath.row] if this array is not empty
                     controller.tmdb = filteredTvShows[indexPath.row]
                     
+                // Segment index 0: Top rated movies
                 case 1:
                     guard !filteredMovies.isEmpty else {
+                        // Set property tmdb of controller to movies[indexPath.row] if filteredMovies is empty
                         controller.tmdb = movies[indexPath.row]
                         return
                     }
+                    // Set property tmdb of controller to filteredMovies[indexPath.row] if this array is not empty
                     controller.tmdb = filteredMovies[indexPath.row]
                     
                 default:
@@ -178,21 +192,30 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         switch segmentControl.selectedSegmentIndex {
+            
+        // Segment index is 0: Top rated tv shows
         case 0:
             guard !filteredTvShows.isEmpty else {
+                // Return tvShows array length if filteredTvShows array is empty
                 return tvShows.count
             }
+            // Return filteredTvShows array length if this array is not empty
             return filteredTvShows.count
-
+            
+        // Segment index is 1: Top rated movies
         case 1:
             guard !filteredMovies.isEmpty else {
+                // Return movies array length if filteredMovies array is empty
                 return movies.count
             }
+            
+            // Return filteredMovies array length if this array is not empty
             return filteredMovies.count
-
+            
         default:
             break
         }
+        
         return 0
     }
 
@@ -201,21 +224,26 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! CustomTableViewCell
         
         switch segmentControl.selectedSegmentIndex {
+            
+        // Segment index is 0: Top rated tv shows
         case 0:
             guard !filteredTvShows.isEmpty else {
+                // created cell based on tvShows array if filteredTvShows array is empty
                 let tvShow = tvShows[indexPath.row]
                 return cell.createTvShowCell(cell: cell, tvShow: tvShow, index: indexPath.row)
             }
-
+            // created cell based on filteredTvShows array, if this array is not empty
             let filteredTvShow = filteredTvShows[indexPath.row]
             return cell.createTvShowCell(cell: cell, tvShow: filteredTvShow, index: indexPath.row)
             
+        // Segment index 1: Top rated movies
         case 1:
             guard !filteredMovies.isEmpty else {
+                // created cell based on movies array if filteredMovies array is empty
                 let movie = movies[indexPath.row]
                 return cell.createMovieCell(cell: cell, movie: movie, index: indexPath.row)
             }
-            
+            // created cell based on filteredMovies array, if this array is not empty
             let filteredMovie = filteredMovies[indexPath.row]
             return cell.createMovieCell(cell: cell, movie: filteredMovie, index: indexPath.row)
             
@@ -226,20 +254,20 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
     
     // Add ligth grey border to scope if user is scrolling down, add white if user is scrolling up
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Find direction of scrolling
         var lastVelocityYSign = 0
         let currentVelocityY = scrollView.panGestureRecognizer.velocity(in: scrollView.superview).y
         let currentVelocityYSign = Int(currentVelocityY).signum()
-        if currentVelocityYSign != lastVelocityYSign &&
-            currentVelocityYSign != 0 {
+        
+        if currentVelocityYSign != lastVelocityYSign && currentVelocityYSign != 0 {
             lastVelocityYSign = currentVelocityYSign
         }
-        if lastVelocityYSign < 0 {
-            addScopeButtomBorder(withColor: UIColor.lightGray)
+        
+        // If scroll direction is downwards, addScopeButtomBorder(withColor: UIColor.lightGray)
+        if lastVelocityYSign < 0 { addScopeButtomBorder(withColor: UIColor.lightGray) }
             
-        }
-        else if lastVelocityYSign > 0 {
-            addScopeButtomBorder(withColor: UIColor.white)
-        }
+        // If scroll direction is upwards, addScopeButtomBorder(withColor: UIColor.white)
+        else if lastVelocityYSign > 0 { addScopeButtomBorder(withColor: UIColor.white) }
     }
     
     // Add white buttom scope border if scroll view did scroll to top
@@ -252,6 +280,7 @@ extension TopTenViewController: UITableViewDataSource, UITableViewDelegate{
 extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         // Perform search if the user has typed atleast 3 letters.
         self.searchText = searchText
         
@@ -265,25 +294,28 @@ extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
         // Search tv shows or movies, based on which segment index is clicked
         switch segmentControl.selectedSegmentIndex{
         case 0:
-            ApiManager.shared.searchTopRatedTvShows(query: formattedSearchText).done({ filteredTvShows in
+            // Segment index 0: Search for top rated tv shows
+            apiManager.searchTopRatedTvShows(query: formattedSearchText).done({ filteredTvShows in
                 self.clearSearchFilters()
                 self.filteredTvShows = filteredTvShows
                 self.tableView.reloadData()
+            // Catch error if fail
+            }).catch { error in
+                self.clearSearchFilters()
+                print(error.localizedDescription)
+            }
+        case 1:
+            // Segment index 1: Search for top rated movies
+            apiManager.searchMovies(query: formattedSearchText).done( { filteredMovies in
+                self.clearSearchFilters()
+                self.filteredMovies = filteredMovies
+                self.tableView.reloadData()
+            // Catch error if fail
             }).catch { error in
                 self.clearSearchFilters()
                 print(error.localizedDescription)
             }
             
-        case 1:
-            ApiManager.shared.searchMovies(query: formattedSearchText).done( { filteredMovies in
-                self.clearSearchFilters()
-                self.filteredMovies = filteredMovies
-                self.tableView.reloadData()
-            }).catch { error in
-                self.clearSearchFilters()
-                print(error.localizedDescription)
-            }
-
         default:
             break
         }
@@ -298,7 +330,7 @@ extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
     func didDismissSearchController(_ searchController: UISearchController) {
         searchController.searchBar.text = self.searchText
     }
-
+    
     /*
     The tranistion of the dismissal of the search controller is not so smooth.
     Adding the searchbar text in willDismissSearchController does not change the
@@ -310,6 +342,5 @@ extension TopTenViewController: UISearchControllerDelegate, UISearchBarDelegate{
     func willDismissSearchController(_ searchController: UISearchController) {
         searchController.searchBar.text = self.searchText
     }
-
 }
 

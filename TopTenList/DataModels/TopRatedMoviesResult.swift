@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TopRatedMoviesResult struct adapting to the Decodable protocol
 struct TopRatedMoviesResult: Decodable{
     
     var page: Int

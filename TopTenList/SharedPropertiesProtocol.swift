@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Shared properties protocol. Will be used by types that share these properties
 protocol SharedPropertiesProtocol {
     
     var vote_average: Double? {get}
