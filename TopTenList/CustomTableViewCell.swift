@@ -21,6 +21,8 @@ class CustomTableViewCell: UITableViewCell {
     
     @IBOutlet weak var rating: UILabel!
     
+    @IBOutlet weak var arrow: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
